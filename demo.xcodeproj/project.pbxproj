@@ -10,6 +10,9 @@
 		8D13D5E926A3F9970070EA88 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D13D5E826A3F9970070EA88 /* GoogleService-Info.plist */; };
 		8D13D5EB26A3F9ED0070EA88 /* Main_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13D5EA26A3F9ED0070EA88 /* Main_ViewController.swift */; };
 		8D13D5ED26A3FA840070EA88 /* Login_ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D13D5EC26A3FA840070EA88 /* Login_ViewController.swift */; };
+		8D68A18726A52199009D4CA8 /* App_coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D68A18626A52199009D4CA8 /* App_coordinator.swift */; };
+		8D68A18926A523DB009D4CA8 /* Main_coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D68A18826A523DB009D4CA8 /* Main_coordinator.swift */; };
+		8D68A18B26A52BBD009D4CA8 /* UIColor + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D68A18A26A52BBD009D4CA8 /* UIColor + Extension.swift */; };
 		8DCB98CA26A3F42C00B48499 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCB98C926A3F42C00B48499 /* AppDelegate.swift */; };
 		8DCB98CC26A3F42C00B48499 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DCB98CB26A3F42C00B48499 /* SceneDelegate.swift */; };
 		8DCB98D126A3F42C00B48499 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCB98CF26A3F42C00B48499 /* Main.storyboard */; };
@@ -24,6 +27,9 @@
 		8D13D5E826A3F9970070EA88 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D13D5EA26A3F9ED0070EA88 /* Main_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_ViewController.swift; sourceTree = "<group>"; };
 		8D13D5EC26A3FA840070EA88 /* Login_ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login_ViewController.swift; sourceTree = "<group>"; };
+		8D68A18626A52199009D4CA8 /* App_coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App_coordinator.swift; sourceTree = "<group>"; };
+		8D68A18826A523DB009D4CA8 /* Main_coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main_coordinator.swift; sourceTree = "<group>"; };
+		8D68A18A26A52BBD009D4CA8 /* UIColor + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor + Extension.swift"; sourceTree = "<group>"; };
 		8DCB98C626A3F42C00B48499 /* demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DCB98C926A3F42C00B48499 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DCB98CB26A3F42C00B48499 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -78,13 +84,16 @@
 			children = (
 				8D13D5E826A3F9970070EA88 /* GoogleService-Info.plist */,
 				8DCB98C926A3F42C00B48499 /* AppDelegate.swift */,
-				8D13D5EA26A3F9ED0070EA88 /* Main_ViewController.swift */,
 				8DCB98CB26A3F42C00B48499 /* SceneDelegate.swift */,
 				8DCB98CF26A3F42C00B48499 /* Main.storyboard */,
 				8DCB98D226A3F42D00B48499 /* Assets.xcassets */,
 				8DCB98D426A3F42D00B48499 /* LaunchScreen.storyboard */,
 				8DCB98D726A3F42D00B48499 /* Info.plist */,
 				8D13D5EC26A3FA840070EA88 /* Login_ViewController.swift */,
+				8D68A18626A52199009D4CA8 /* App_coordinator.swift */,
+				8D68A18826A523DB009D4CA8 /* Main_coordinator.swift */,
+				8D13D5EA26A3F9ED0070EA88 /* Main_ViewController.swift */,
+				8D68A18A26A52BBD009D4CA8 /* UIColor + Extension.swift */,
 			);
 			path = demo;
 			sourceTree = "<group>";
@@ -212,8 +221,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D68A18B26A52BBD009D4CA8 /* UIColor + Extension.swift in Sources */,
 				8D13D5ED26A3FA840070EA88 /* Login_ViewController.swift in Sources */,
 				8DCB98CA26A3F42C00B48499 /* AppDelegate.swift in Sources */,
+				8D68A18726A52199009D4CA8 /* App_coordinator.swift in Sources */,
+				8D68A18926A523DB009D4CA8 /* Main_coordinator.swift in Sources */,
 				8DCB98CC26A3F42C00B48499 /* SceneDelegate.swift in Sources */,
 				8D13D5EB26A3F9ED0070EA88 /* Main_ViewController.swift in Sources */,
 			);
