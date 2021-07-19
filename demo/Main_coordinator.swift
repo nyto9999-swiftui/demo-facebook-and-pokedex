@@ -16,7 +16,7 @@ final class Main_coordinator: Coordinator {
     }
     
     func start() {
-        let main_viewcontroller = Main_ViewController.instantiate()
+        let main_viewcontroller = MainViewController.instantiate()
         navigation_controller.setViewControllers([main_viewcontroller], animated: false)
     }
 }
