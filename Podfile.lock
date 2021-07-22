@@ -112,6 +112,7 @@ PODS:
   - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
+  - FBSDKCoreKit
   - FBSDKLoginKit
   - Firebase/Analytics
   - Firebase/Auth
@@ -176,6 +177,6 @@ SPEC CHECKSUMS:
   RealmSwift: 2a3c75ecbf5a3b04080ff5f6f0554cf6337b4764
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: db815ffbc8ebf78f63aa0f2e7e96adc75a9c05cf
+PODFILE CHECKSUM: 1d5648a9f0c46bb8858b5d719730ae9a5cd5b01f
 
 COCOAPODS: 1.10.1
