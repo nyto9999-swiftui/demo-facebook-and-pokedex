@@ -6,15 +6,26 @@
 //
 
 import UIKit
-
+import FirebaseAuth
 class MainViewController: UIViewController {
-
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        validateAuth()
+    }
+    
+    private func validateAuth(){
+        
+        if FirebaseAuth.Auth.auth().currentUser == nil {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(identifier: "LoginViewController") as! LoginViewController
+            present(vc, animated: true)
+        }
         
     }
-
 }
+
+
 
