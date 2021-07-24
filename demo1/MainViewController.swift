@@ -4,18 +4,22 @@
 //
 //  Created by 宇宣 Chen on 2021/7/22.
 //
-
 import UIKit
+import SwiftUI
 import FirebaseAuth
+import SDCAlertView
+
 class MainViewController: UIViewController {
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         validateAuth()
     }
-    
+   
+    @IBAction func didTapPost(_ sender: Any) {
+        
+       
+    }
     private func validateAuth(){
         
         if FirebaseAuth.Auth.auth().currentUser == nil {
@@ -26,6 +30,10 @@ class MainViewController: UIViewController {
         
     }
 }
+
+
+
+
 
 
 

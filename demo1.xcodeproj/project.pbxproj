@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D78A9D626ABFE90006F538D /* BottomSheetController in Frameworks */ = {isa = PBXBuildFile; productRef = 8D78A9D526ABFE90006F538D /* BottomSheetController */; };
+		8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D78A9D726ABFF23006F538D /* PostViewController.swift */; };
 		8D873A6226A9FD8C00C82044 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */; };
 		8D873A6426AA210D00C82044 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D873A6326AA210D00C82044 /* RegisterViewController.swift */; };
 		8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D873A6526AA9A8600C82044 /* UI + Extension.swift */; };
@@ -27,6 +29,7 @@
 		477820BE2A7E3D480B1FC5A4 /* Pods-demo1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo1.release.xcconfig"; path = "Target Support Files/Pods-demo1/Pods-demo1.release.xcconfig"; sourceTree = "<group>"; };
 		640150FD8150C0CB787E55B4 /* Pods-demo1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo1.debug.xcconfig"; path = "Target Support Files/Pods-demo1/Pods-demo1.debug.xcconfig"; sourceTree = "<group>"; };
 		799038A1FB43758EE56C927B /* Pods_demo1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_demo1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D78A9D726ABFF23006F538D /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D873A6326AA210D00C82044 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		8D873A6526AA9A8600C82044 /* UI + Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UI + Extension.swift"; sourceTree = "<group>"; };
@@ -50,6 +53,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9471B418E264397A2FC6FEF5 /* Pods_demo1.framework in Frameworks */,
+				8D78A9D626ABFE90006F538D /* BottomSheetController in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -99,6 +103,7 @@
 				8D873A6526AA9A8600C82044 /* UI + Extension.swift */,
 				8D873A6726AA9AEE00C82044 /* DatabaseManager.swift */,
 				8D873A6926AA9B0700C82044 /* StorageManager.swift */,
+				8D78A9D726ABFF23006F538D /* PostViewController.swift */,
 			);
 			path = demo1;
 			sourceTree = "<group>";
@@ -130,6 +135,9 @@
 			dependencies = (
 			);
 			name = demo1;
+			packageProductDependencies = (
+				8D78A9D526ABFE90006F538D /* BottomSheetController */,
+			);
 			productName = demo1;
 			productReference = 8DD2169026A981E500D00E14 /* demo1.app */;
 			productType = "com.apple.product-type.application";
@@ -157,6 +165,9 @@
 				Base,
 			);
 			mainGroup = 8DD2168726A981E500D00E14;
+			packageReferences = (
+				8D78A9D426ABFE90006F538D /* XCRemoteSwiftPackageReference "BottomSheetController" */,
+			);
 			productRefGroup = 8DD2169126A981E500D00E14 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -231,6 +242,7 @@
 				8DD2169826A981E500D00E14 /* MainViewController.swift in Sources */,
 				8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */,
 				8D873A6A26AA9B0700C82044 /* StorageManager.swift in Sources */,
+				8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */,
 				8DD2169426A981E500D00E14 /* AppDelegate.swift in Sources */,
 				8DD216A826A989F000D00E14 /* ProfileViewController.swift in Sources */,
 				8D873A6426AA210D00C82044 /* RegisterViewController.swift in Sources */,
@@ -439,6 +451,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8D78A9D426ABFE90006F538D /* XCRemoteSwiftPackageReference "BottomSheetController" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/naru-jpn/BottomSheetController";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8D78A9D526ABFE90006F538D /* BottomSheetController */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8D78A9D426ABFE90006F538D /* XCRemoteSwiftPackageReference "BottomSheetController" */;
+			productName = BottomSheetController;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8DD2168826A981E500D00E14 /* Project object */;
 }
