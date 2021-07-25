@@ -1,4 +1,5 @@
 PODS:
+  - BSImagePicker (3.3.1)
   - FBSDKCoreKit (11.0.0):
     - FBSDKCoreKit/Core (= 11.0.0)
   - FBSDKCoreKit/Core (11.0.0):
@@ -102,17 +103,12 @@ PODS:
   - nanopb/decode (2.30907.0)
   - nanopb/encode (2.30907.0)
   - PromisesObjC (1.2.12)
-  - Realm (10.8.1):
-    - Realm/Headers (= 10.8.1)
-  - Realm/Headers (10.8.1)
-  - RealmSwift (10.8.1):
-    - Realm (= 10.8.1)
-  - SDCAlertView (12.0.1)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
+  - BSImagePicker (~> 3.1)
   - FBSDKCoreKit
   - FBSDKLoginKit
   - Firebase/Analytics
@@ -122,12 +118,11 @@ DEPENDENCIES:
   - Firebase/Storage
   - JGProgressHUD
   - MessageKit
-  - RealmSwift
-  - SDCAlertView
   - SDWebImage
 
 SPEC REPOS:
   trunk:
+    - BSImagePicker
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
@@ -149,12 +144,10 @@ SPEC REPOS:
     - MessageKit
     - nanopb
     - PromisesObjC
-    - Realm
-    - RealmSwift
-    - SDCAlertView
     - SDWebImage
 
 SPEC CHECKSUMS:
+  BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
   FBSDKCoreKit: 3e6f565de8b4fbe11f8ee5d499f5898b0bde2cdd
   FBSDKCoreKit_Basics: 9cf699662174870962deb39f07a5d70d4594c4b7
   FBSDKLoginKit: 0ba3e15e9bdbeb46716d0fa375e6b71c39d4c477
@@ -176,11 +169,8 @@ SPEC CHECKSUMS:
   MessageKit: d153fbbbcb12f3f4045a1ba8874298924dacfb62
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
-  Realm: a2db54d9dcceddeba936b429f5b3d6610a109686
-  RealmSwift: 2a3c75ecbf5a3b04080ff5f6f0554cf6337b4764
-  SDCAlertView: d6070733e6ce72360dde3f84a2f9eafcda25ed49
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: 50183802e9f2d275b4fd3cf88248ef1c8a45dc63
+PODFILE CHECKSUM: c0acf7366064e1b5ebcada17e52f747e0b42ae64
 
 COCOAPODS: 1.10.1

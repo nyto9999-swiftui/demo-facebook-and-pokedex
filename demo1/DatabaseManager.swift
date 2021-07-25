@@ -22,51 +22,34 @@ final class DatabaseManager{
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
-    public func inserUser(with user: AppUser, completion: @escaping (Bool) -> Void){
-        
-        database.child(user.safeEmail).setValue([
-            "first_name:": user.firstName,
-            "last_name" : user.lastName
-        ], withCompletionBlock: { error, _ in
-            guard error == nil else {
-                print("Failed to insert user to db")
+    public func insertUser(with user: AppUser, completion: @escaping (Bool) -> Void){
+      
+        self.database.child("users/\(user.safeEmail)/username").setValue(user.firstName+user.lastName)
+        self.database.child("users/\(user.safeEmail)/username").getData(completion: { error, snapshot in
+            if let error = error {
+                print("Error getting data \(error)")
                 completion(false)
-                return
             }
-            self.database.child("users").observeSingleEvent(of: .value, with: { snapshot in
-                // if db has users attr
-                if var usersCollection = snapshot.value as? [[String: String]] {
-                    let newUser = [
-                        "name" : user.firstName + "" + user.lastName,
-                        "email" : user.safeEmail
-                    ]
-                    usersCollection.append(newUser)
-                    
-                    self.database.child("users").setValue(usersCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            completion(false)
-                            return
-                        }
-                        completion(true)
-                    })
-                    
-                }
-                else {
-                    let newUserCollection: [[String: String]] = [
-                        ["name": user.firstName + "" + user.lastName,
-                         "email": user.safeEmail
-                        ]
-                    ]
-                    self.database.child("users").setValue(newUserCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            completion(false)
-                            return
-                        }
-                        completion(true)
-                    })
-                }
-                
-            })
+            else if snapshot.exists() {
+                completion(true)
+            }
+            else {
+                print("No data available")
+                completion(false)
+            }
+        })
+    }
+    
+
+    
+    public func insertPost(with post: Post, completion: @escaping (Result<Any, Error>) -> Void){
+        self.database.child("users/\(post.safeEmail)/username").getData(completion: { error, snapshot in
+            if let error = error {
+                completion(.failure(error))
+            }
+            else{
+                completion(.success(snapshot.value as Any))
+            }
         })
     }
     
@@ -76,7 +59,7 @@ extension DatabaseManager {
     public func userExists(with email: String,
                            completion: @escaping ((Bool) -> Void)) {
         
-        
+       
         var safeEmail = email.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         
@@ -98,56 +81,8 @@ extension DatabaseManager {
         })
     }
     
-    public func insertUser(with user: AppUser, completion: @escaping (Bool)->Void){
-        database.child(user.safeEmail).setValue([
-            "first_name:": user.firstName,
-            "last_name": user.lastName
-        ], withCompletionBlock: { error, _ in
-            guard error == nil else {
-                print("Failed to write to database")
-                completion(false)
-                return
-            }
-            
-            self.database.child("users").observeSingleEvent(of: .value, with: { snapshot in
-                if var usersCollection = snapshot.value as? [[String: String]] {
-                    //append to user dictionary
-                    let newElement = [
-                        "name": user.firstName  + "" + user.lastName,
-                        "email": user.safeEmail
-                    ]
-                    usersCollection.append(newElement)
-                    
-                    self.database.child("users").setValue(usersCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            completion(false)
-                            return
-                        }
-                        
-                        completion(true)
-                    })
-                    
-                    
-                }
-                else {
-                    //create that array
-                    let newCollection: [[String: String]] = [
-                        ["name": user.firstName  + "" + user.lastName,
-                         "email": user.safeEmail]
-                    ]
-                    
-                    self.database.child("users").setValue(newCollection, withCompletionBlock: { error, _ in
-                        guard error == nil else {
-                            completion(false)
-                            return
-                        }
-                        
-                        completion(true)
-                    })
-                }
-            })
-        })
-}
+    
+    
 }
 
 
@@ -155,7 +90,6 @@ struct AppUser {
     let firstName: String
     let lastName: String
     let emailAddress: String
-    
     var safeEmail: String {
         
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
@@ -165,4 +99,17 @@ struct AppUser {
     var profilePictureName: String {
         return "\(safeEmail)_profile_picture.png"
     }
+}
+
+struct Post {
+    let owner: String
+    let txt: String
+    let image: UIImage
+    var safeEmail: String {
+        
+        var safeEmail = owner.replacingOccurrences(of: ".", with: "-")
+        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
+        return safeEmail
+    }
+
 }

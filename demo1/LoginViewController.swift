@@ -118,7 +118,7 @@ extension LoginViewController: LoginButtonDelegate {
             
             DatabaseManager.shared.userExists(with: email, completion: {exsits in
                 if !exsits {
-                    
+                    print("hihihihi")
                     let appUser = AppUser(firstName: firstName, lastName: lastName, emailAddress: email)
                     DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                         if success {
@@ -156,10 +156,7 @@ extension LoginViewController: LoginButtonDelegate {
                 let credential = FacebookAuthProvider.credential(withAccessToken: token)
                 FirebaseAuth.Auth.auth().signIn(with: credential, completion: { [weak self] authResult, error in
                     
-                    guard let strongSelf = self else {
-                        return
-                    }
-                    
+
                     guard authResult != nil, error == nil else {
                         if let error = error {
                             print("Facebook credential login failed, MFA may be needed")

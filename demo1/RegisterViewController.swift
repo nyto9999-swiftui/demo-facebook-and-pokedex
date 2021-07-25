@@ -60,7 +60,7 @@ class RegisterViewController: UIViewController {
                 UserDefaults.standard.setValue("\(firstname)\(lastname)", forKey: "name")
                 // inser user to db
                 let appUser = AppUser(firstName: firstname, lastName: lastname, emailAddress: email)
-                DatabaseManager.shared.inserUser(with: appUser, completion: { success in
+                DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                     if success {
                         guard let image = self?.imageView.image,
                               let data = image.pngData() else {

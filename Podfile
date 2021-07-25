@@ -27,9 +27,9 @@ pod 'Firebase/Storage'
 pod 'FBSDKCoreKit'
 pod 'FBSDKLoginKit'
 
-pod 'SDCAlertView'
+
 pod 'MessageKit'
 pod 'JGProgressHUD'
-pod 'RealmSwift'
 pod 'SDWebImage'
+pod "BSImagePicker", "~> 3.1"
 end
