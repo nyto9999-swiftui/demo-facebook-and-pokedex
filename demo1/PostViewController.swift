@@ -12,38 +12,102 @@ import PhotosUI
 import FirebaseAuth
 class PostViewController: UIViewController {
     
+    @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var profileImageView: UIImageView!
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
+    var safeEmail = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        nameLabel.text = UserDefaults.standard.string(forKey: "name")
+        safeEmail = getSafeEmail()
         collectionSetup()
-
-
+        fetchImage(imageView: profileImageView)
+        
+        
     }
     
-    /*post */
-    @IBAction func sentPost(_ sender: Any) {
-        if let email = UserDefaults.standard.string(forKey: "email") {
-            let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
-            let post = Post(owner: safeEmail, txt: textView.text, image: images[0])
-            DatabaseManager.shared.insertPost(with: post, completion: { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    print(error)
-                case .success(let value):
-                    print(value)
-                }
-                
-            })
-        }
-    
-     
-    }
-    @IBAction func presentPicker(_ sender: Any) {
+    @IBAction func camera(_ sender: Any) {
         runPicker()
     }
+    private func getSafeEmail() -> String {
+        let email = UserDefaults.standard.string(forKey: "email")
+        let safe = DatabaseManager.safeEmail(emailAddress: email!)
+        return safe
+    }
+    
+    private func fetchImage(imageView: UIImageView) {
+        print("im safe email: \(safeEmail)")
+        let fileName = "1_" + safeEmail + "_profile_picture.png"
+        let path = "image/"+fileName
+        StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
+            switch result {
+            case .success(let url):
+                self?.downloadProfileImage(imageView: imageView, url: url)
+            case .failure(let error):
+                print("Failed to get download url: \(error)")
+            }
+        })
+    }
+    private func downloadProfileImage(imageView: UIImageView, url: URL) {
+        
+        
+        URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
+            guard let data = data, error == nil else {
+                return
+            }
+            DispatchQueue.main.async {
+                let image = UIImage(data: data)
+                self.profileImageView.image = image
+            }
+        }).resume()
+    }
+    /*post */
+    @IBAction func sentPost(_ sender: Any) {
+        let time = NSDate().timeIntervalSince1970
+        let postID = "\(safeEmail)_\(String(time))"
+        
+        
+        print(postID)
+        let post = Post(postID: postID, owner: safeEmail, txt: textView.text, image: images)
+        DatabaseManager.shared.insertPost(with: post, completion: { [weak self] success in
+            if success {
+                var datas = [Data]()
+                //upload image to storage
+                for img in post.image {
+                    guard let data = img.pngData() else {
+                        print("png error")
+                        return
+                    }
+                    print("send post to db")
+                    datas.append(data)
+                }
+                
+                let filename = post.postPictureName
+                StorageManager.shared.uploadPicture(with: datas,file: post.safePost, fileName: filename, completion: { result in
+                    switch result {
+                    case .success(let url):
+                        print(url)
+                    case .failure(let error):
+                        print(error)
+                    }
+                })
+                DatabaseManager.shared.insertPostWall(with: post, completion: { success in
+                    if success {
+                        print("insertpostwall success")
+                    }
+                })
+            }
+        })
+        textView.text = ""
+        images = [UIImage]()
+        self.dismiss(animated: true)
+        
+        
+    }
+
     func collectionSetup() -> Void{
         collectionView.frame = view.bounds
         let layout = UICollectionViewFlowLayout()
@@ -108,7 +172,7 @@ class PostViewController: UIViewController {
             selectedAssets = []
             
             //The button is enabled if there is images
-    
+            
             
             
         }
@@ -116,9 +180,9 @@ class PostViewController: UIViewController {
         print("complete photo array \(self.images)")
     }
     
-
-
-
+    
+    
+    
 }
 
 extension PostViewController: UICollectionViewDelegate{
@@ -127,8 +191,6 @@ extension PostViewController: UICollectionViewDelegate{
         print("delete tapped image")
         images.remove(at: indexPath.row)
         
-        print(images)
-        print(selectedAssets)
         self.collectionView.reloadData()
     }
 }
@@ -157,6 +219,6 @@ extension PostViewController: UIImagePickerControllerDelegate, UINavigationContr
         images.append(image)
         collectionView.reloadData()
         picker.dismiss(animated: true, completion: nil)
-
+        
     }
 }

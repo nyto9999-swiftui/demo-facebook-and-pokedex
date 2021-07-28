@@ -118,7 +118,7 @@ extension LoginViewController: LoginButtonDelegate {
             
             DatabaseManager.shared.userExists(with: email, completion: {exsits in
                 if !exsits {
-                    print("hihihihi")
+                   
                     let appUser = AppUser(firstName: firstName, lastName: lastName, emailAddress: email)
                     DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                         if success {
@@ -126,7 +126,7 @@ extension LoginViewController: LoginButtonDelegate {
                             guard let url = URL(string: pictureUrl) else {
                                 return
                             }
-                            
+                            var datas = [Data]()
                             print("Downloading data from facebook image")
                             
                             // tranfer url to data
@@ -135,11 +135,12 @@ extension LoginViewController: LoginButtonDelegate {
                                     print("Failed to get data from facebook")
                                     return
                                 }
-                                
+                                datas.append(data)
                                 print("got data from FB, uploading...")
                                 
                                 let filename = appUser.profilePictureName
-                                StorageManager.shared.uploadProfilePicture(with: data, fileName: filename, completion: { result in
+                                
+                                StorageManager.shared.uploadPicture(with: datas, file: "profileImage", fileName: filename, completion: { result in
                                     switch result {
                                     case .success(let downloadUrl):
                                         UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")

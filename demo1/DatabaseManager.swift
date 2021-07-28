@@ -42,17 +42,37 @@ final class DatabaseManager{
     
 
     
-    public func insertPost(with post: Post, completion: @escaping (Result<Any, Error>) -> Void){
-        self.database.child("users/\(post.safeEmail)/username").getData(completion: { error, snapshot in
+    public func insertPost(with post: Post, completion: @escaping ((Bool) -> Void)){
+                                        //owner = safeEmail
+        self.database.child("users/\(post.owner)/Post/\(post.safePost)").setValue([
+            "images: \(post.image.count)",
+            "txt: \(post.txt)"
+        ]) { error, ref in
             if let error = error {
-                completion(.failure(error))
+                print("Data could not be saved: \(error)")
+                completion(false)
+                return
             }
-            else{
-                completion(.success(snapshot.value as Any))
-            }
-        })
+            completion(true)
+        }
     }
     
+    //main page post wall
+    public func insertPostWall(with post: Post, completion: @escaping ((Bool) -> Void)){
+                                        //owner = safeEmail
+        self.database.child("postwall/\(post.safePost)").setValue([
+            "owner:\(post.owner)",
+            "txt:\(post.txt)"
+        ]) { error, ref in
+            if let error = error {
+                print("Data could not be saved: \(error)")
+                completion(false)
+                return
+            }
+            completion(true)
+        }
+    
+}
 }
 
 extension DatabaseManager {
@@ -91,25 +111,29 @@ struct AppUser {
     let lastName: String
     let emailAddress: String
     var safeEmail: String {
-        
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
     var profilePictureName: String {
-        return "\(safeEmail)_profile_picture.png"
+        return "\(safeEmail)_profile_picture"
     }
 }
 
 struct Post {
+    let postID: String
     let owner: String
     let txt: String
-    let image: UIImage
-    var safeEmail: String {
-        
-        var safeEmail = owner.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
+    let image: [UIImage]
+    
+    var safePost: String {
+        var safePostID = postID.replacingOccurrences(of: ".", with: "-")
+        return safePostID
     }
+    
+    var postPictureName: String {
+        return "\(safePost)_post_picture"
+    }
+
 
 }
