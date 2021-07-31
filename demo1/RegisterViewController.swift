@@ -62,17 +62,14 @@ class RegisterViewController: UIViewController {
                 let appUser = AppUser(firstName: firstname, lastName: lastname, emailAddress: email)
                 DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                     if success {
-                        var datas = [Data]()
                         
-                        DispatchQueue.main.async {
-                            if let data = self?.imageView.image?.pngData() {
-                                
-                                datas.append(data)
-                            }
+                        guard let image = self?.imageView.image,
+                              let data = image.pngData() else {
+                            return
                         }
                         
-                        let imgString = appUser.profilePictureName
-                        StorageManager.shared.uploadPicture(with: datas, file: "profile", fileName: imgString, completion: { result in
+                        let fileName = appUser.profilePictureName
+                        StorageManager.shared.uploadProfilePicture(with: data, file: "profile", fileName: fileName, completion: { result in
                             switch result {
                             case.success(let downloadUrl):
                                 UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")

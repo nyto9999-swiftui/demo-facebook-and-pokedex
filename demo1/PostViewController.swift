@@ -16,13 +16,18 @@ class PostViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var profileImageView: UIImageView!
+    
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
-    var safeEmail = ""
+    let name = UserDefaults.standard.string(forKey: "name")
+    let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameLabel.text = UserDefaults.standard.string(forKey: "name")
-        safeEmail = getSafeEmail()
+        
+        nameLabel.text = name
+        
+
         collectionSetup()
         fetchImage(imageView: profileImageView)
         
@@ -32,15 +37,9 @@ class PostViewController: UIViewController {
     @IBAction func camera(_ sender: Any) {
         runPicker()
     }
-    private func getSafeEmail() -> String {
-        let email = UserDefaults.standard.string(forKey: "email")
-        let safe = DatabaseManager.safeEmail(emailAddress: email!)
-        return safe
-    }
-    
     private func fetchImage(imageView: UIImageView) {
-        print("im safe email: \(safeEmail)")
-        let fileName = "1_" + safeEmail + "_profile_picture.png"
+        let fileName = "\(safeEmail)_profile_picture.png"
+        UserDefaults.standard.setValue(fileName, forKey: "profile_picture")
         let path = "image/"+fileName
         StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
             switch result {
@@ -67,16 +66,17 @@ class PostViewController: UIViewController {
     /*post */
     @IBAction func sentPost(_ sender: Any) {
         let time = NSDate().timeIntervalSince1970
-        let postID = "\(safeEmail)_\(String(time))"
+        let profileImgName = UserDefaults.standard.string(forKey: "profile_picture")
+        let safeID = DatabaseManager.safeString(for: "\(safeEmail)_\(String(time))")
+        let post = Post(postID: safeID, profileImage: profileImgName!, owner: name!, txt: textView.text, image: images)
         
-        
-        print(postID)
-        let post = Post(postID: postID, owner: safeEmail, txt: textView.text, image: images)
+        print("jfladjfdasjf\(post.profileImage)")
         DatabaseManager.shared.insertPost(with: post, completion: { [weak self] success in
             if success {
                 var datas = [Data]()
                 //upload image to storage
-                for img in post.image {
+                
+                for img in post.image! {
                     guard let data = img.pngData() else {
                         print("png error")
                         return
@@ -94,11 +94,6 @@ class PostViewController: UIViewController {
                         print(error)
                     }
                 })
-                DatabaseManager.shared.insertPostWall(with: post, completion: { success in
-                    if success {
-                        print("insertpostwall success")
-                    }
-                })
             }
         })
         textView.text = ""
@@ -109,7 +104,8 @@ class PostViewController: UIViewController {
     }
 
     func collectionSetup() -> Void{
-        collectionView.frame = view.bounds
+        collectionView.frame = CGRect(x: 0,y: 0,width: view.frame.width,height: 0)
+        
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
         layout.itemSize = CGSize(width: collectionView.width/3-20, height: collectionView.width/3-20)

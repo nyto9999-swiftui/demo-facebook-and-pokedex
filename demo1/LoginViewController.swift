@@ -44,7 +44,7 @@ class LoginViewController: UIViewController {
                 return
             }
             let user = result.user
-            let safeEmail = DatabaseManager.safeEmail(emailAddress: email)
+            let safeEmail = DatabaseManager.safeString(for: email)
             DatabaseManager.shared.getDataFor(path: safeEmail, completion: { [weak self] result in
                 switch result {
                 case .success(let data):
@@ -126,7 +126,6 @@ extension LoginViewController: LoginButtonDelegate {
                             guard let url = URL(string: pictureUrl) else {
                                 return
                             }
-                            var datas = [Data]()
                             print("Downloading data from facebook image")
                             
                             // tranfer url to data
@@ -135,12 +134,11 @@ extension LoginViewController: LoginButtonDelegate {
                                     print("Failed to get data from facebook")
                                     return
                                 }
-                                datas.append(data)
                                 print("got data from FB, uploading...")
                                 
                                 let filename = appUser.profilePictureName
                                 
-                                StorageManager.shared.uploadPicture(with: datas, file: "profileImage", fileName: filename, completion: { result in
+                                StorageManager.shared.uploadProfilePicture(with: data, file: "profile", fileName: filename, completion: { result in
                                     switch result {
                                     case .success(let downloadUrl):
                                         UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")

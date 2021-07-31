@@ -17,13 +17,14 @@ final class DatabaseManager{
     private let database = Database.database().reference()
     
     
-    static func safeEmail(emailAddress : String) -> String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
+    static func safeString(for firebaseUpload : String) -> String {
+        var safeEmail = firebaseUpload.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
+    
+    //insert user
     public func insertUser(with user: AppUser, completion: @escaping (Bool) -> Void){
-      
         self.database.child("users/\(user.safeEmail)/username").setValue(user.firstName+user.lastName)
         self.database.child("users/\(user.safeEmail)/username").getData(completion: { error, snapshot in
             if let error = error {
@@ -40,39 +41,73 @@ final class DatabaseManager{
         })
     }
     
-
-    
+    //main page post wall
     public func insertPost(with post: Post, completion: @escaping ((Bool) -> Void)){
                                         //owner = safeEmail
-        self.database.child("users/\(post.owner)/Post/\(post.safePost)").setValue([
-            "images: \(post.image.count)",
-            "txt: \(post.txt)"
-        ]) { error, ref in
-            if let error = error {
-                print("Data could not be saved: \(error)")
-                completion(false)
-                return
+        self.database.child("postwall").observeSingleEvent(of: .value, with: { snapshot in
+            if var postwallCollection = snapshot.value as? [[String:Any]] {
+                let newPost: [String: Any] = [
+                    "owner":post.owner,
+                    "txt":post.txt,
+                    "postID":post.postID,
+                    "profileImg": post.profileImage
+                ]
+                postwallCollection.append(newPost)
+                
+                self.database.child("postwall").setValue(postwallCollection, withCompletionBlock: {error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                })
             }
-            completion(true)
-        }
+            else {
+                //create that array
+                let newPost: [[String: Any]] = [[
+                    "owner":post.owner,
+                    "txt":post.txt,
+                    "postID":post.postID,
+                    "profileImg": post.profileImage
+                ]]
+                self.database.child("postwall").setValue(newPost, withCompletionBlock: {error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                })
+            }
+        })
     }
     
-    //main page post wall
-    public func insertPostWall(with post: Post, completion: @escaping ((Bool) -> Void)){
-                                        //owner = safeEmail
-        self.database.child("postwall/\(post.safePost)").setValue([
-            "owner:\(post.owner)",
-            "txt:\(post.txt)"
-        ]) { error, ref in
-            if let error = error {
-                print("Data could not be saved: \(error)")
-                completion(false)
+    //get all posts
+    public func getAllPosts(completion: @escaping (Result<[Post], Error>) -> Void) {
+        
+        database.child("postwall").observe(.value, with: { snapshot in
+            var postfeed:[Post] = []
+            guard let posts = snapshot.value as? [[String:Any]] else {
+                print("failed to get all post")
                 return
             }
-            completion(true)
-        }
-    
-}
+            print(posts.count)
+            print(posts)
+            for i in posts {
+                guard let owner = i["owner"] as? String,
+                      let txt = i["txt"] as? String,
+                      let postID = i["postID"] as? String,
+                      let profileImge = i["profileImg"] as? String else {
+                    completion(.failure(DatabaseError.failedToFetch))
+                    return
+                }
+                postfeed.append(Post(postID: postID, profileImage: profileImge, owner: owner, txt: txt, image: nil))
+            }
+            completion(.success(postfeed))
+            
+        })
+        
+    }
+
 }
 
 extension DatabaseManager {
@@ -101,39 +136,19 @@ extension DatabaseManager {
         })
     }
     
+    public func getSafeString() -> String {
+        let email = UserDefaults.standard.string(forKey: "email")
+        let safe = DatabaseManager.safeString(for: email!)
+        return safe
+    }
+  
+    
+    
+    
     
     
 }
 
 
-struct AppUser {
-    let firstName: String
-    let lastName: String
-    let emailAddress: String
-    var safeEmail: String {
-        var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")
-        safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
-        return safeEmail
-    }
-    var profilePictureName: String {
-        return "\(safeEmail)_profile_picture"
-    }
-}
-
-struct Post {
-    let postID: String
-    let owner: String
-    let txt: String
-    let image: [UIImage]
-    
-    var safePost: String {
-        var safePostID = postID.replacingOccurrences(of: ".", with: "-")
-        return safePostID
-    }
-    
-    var postPictureName: String {
-        return "\(safePost)_post_picture"
-    }
 
 
-}

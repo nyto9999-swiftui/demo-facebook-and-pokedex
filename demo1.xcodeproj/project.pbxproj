@@ -10,10 +10,11 @@
 		8D0E779926AC86B100004F35 /* KeyboardToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */; };
 		8D0E779D26AC983D00004F35 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E779B26AC983D00004F35 /* PostCollectionViewCell.swift */; };
 		8D0E779E26AC983D00004F35 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D0E779C26AC983D00004F35 /* PostCollectionViewCell.xib */; };
-		8D0E77A126B1342100004F35 /* MainTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E779F26B1342100004F35 /* MainTableViewCell.swift */; };
-		8D0E77A226B1342100004F35 /* MainTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D0E77A026B1342100004F35 /* MainTableViewCell.xib */; };
-		8D0E77A526B1554300004F35 /* MainPostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E77A326B1554300004F35 /* MainPostCollectionViewCell.swift */; };
-		8D0E77A626B1554300004F35 /* MainPostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D0E77A426B1554300004F35 /* MainPostCollectionViewCell.xib */; };
+		8D0E783E26B3781000004F35 /* MainPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E783C26B3781000004F35 /* MainPostTableViewCell.swift */; };
+		8D0E783F26B3781000004F35 /* MainPostTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D0E783D26B3781000004F35 /* MainPostTableViewCell.xib */; };
+		8D0E784526B5B0E400004F35 /* I.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784426B5B0E400004F35 /* I.swift */; };
+		8D0E784A26B5BC3D00004F35 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784926B5BC3D00004F35 /* Post.swift */; };
+		8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784B26B5BC4900004F35 /* AppUser.swift */; };
 		8D78A9D626ABFE90006F538D /* BottomSheetController in Frameworks */ = {isa = PBXBuildFile; productRef = 8D78A9D526ABFE90006F538D /* BottomSheetController */; };
 		8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D78A9D726ABFF23006F538D /* PostViewController.swift */; };
 		8D873A6226A9FD8C00C82044 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */; };
@@ -39,10 +40,11 @@
 		8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbarButton.swift; sourceTree = "<group>"; };
 		8D0E779B26AC983D00004F35 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		8D0E779C26AC983D00004F35 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
-		8D0E779F26B1342100004F35 /* MainTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTableViewCell.swift; sourceTree = "<group>"; };
-		8D0E77A026B1342100004F35 /* MainTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainTableViewCell.xib; sourceTree = "<group>"; };
-		8D0E77A326B1554300004F35 /* MainPostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPostCollectionViewCell.swift; sourceTree = "<group>"; };
-		8D0E77A426B1554300004F35 /* MainPostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainPostCollectionViewCell.xib; sourceTree = "<group>"; };
+		8D0E783C26B3781000004F35 /* MainPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPostTableViewCell.swift; sourceTree = "<group>"; };
+		8D0E783D26B3781000004F35 /* MainPostTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainPostTableViewCell.xib; sourceTree = "<group>"; };
+		8D0E784426B5B0E400004F35 /* I.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = I.swift; sourceTree = "<group>"; };
+		8D0E784926B5BC3D00004F35 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		8D0E784B26B5BC4900004F35 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
 		8D78A9D726ABFF23006F538D /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D873A6326AA210D00C82044 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -87,12 +89,19 @@
 			children = (
 				8D0E779B26AC983D00004F35 /* PostCollectionViewCell.swift */,
 				8D0E779C26AC983D00004F35 /* PostCollectionViewCell.xib */,
-				8D0E779F26B1342100004F35 /* MainTableViewCell.swift */,
-				8D0E77A026B1342100004F35 /* MainTableViewCell.xib */,
-				8D0E77A326B1554300004F35 /* MainPostCollectionViewCell.swift */,
-				8D0E77A426B1554300004F35 /* MainPostCollectionViewCell.xib */,
+				8D0E783C26B3781000004F35 /* MainPostTableViewCell.swift */,
+				8D0E783D26B3781000004F35 /* MainPostTableViewCell.xib */,
 			);
 			path = Cell;
+			sourceTree = "<group>";
+		};
+		8D0E784626B5BC1E00004F35 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8D0E784926B5BC3D00004F35 /* Post.swift */,
+				8D0E784B26B5BC4900004F35 /* AppUser.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		8DD2168726A981E500D00E14 = {
@@ -116,6 +125,7 @@
 		8DD2169226A981E500D00E14 /* demo1 */ = {
 			isa = PBXGroup;
 			children = (
+				8D0E784626B5BC1E00004F35 /* Model */,
 				8D0E779A26AC97FD00004F35 /* Cell */,
 				8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */,
 				8DD2169326A981E500D00E14 /* AppDelegate.swift */,
@@ -133,6 +143,7 @@
 				8D873A6926AA9B0700C82044 /* StorageManager.swift */,
 				8D78A9D726ABFF23006F538D /* PostViewController.swift */,
 				8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */,
+				8D0E784426B5B0E400004F35 /* I.swift */,
 			);
 			path = demo1;
 			sourceTree = "<group>";
@@ -211,12 +222,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D0E77A626B1554300004F35 /* MainPostCollectionViewCell.xib in Resources */,
-				8D0E77A226B1342100004F35 /* MainTableViewCell.xib in Resources */,
 				8DD216A026A981E500D00E14 /* LaunchScreen.storyboard in Resources */,
 				8D873A6226A9FD8C00C82044 /* GoogleService-Info.plist in Resources */,
 				8DD2169D26A981E500D00E14 /* Assets.xcassets in Resources */,
 				8DD2169B26A981E500D00E14 /* Main.storyboard in Resources */,
+				8D0E783F26B3781000004F35 /* MainPostTableViewCell.xib in Resources */,
 				8D0E779E26AC983D00004F35 /* PostCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -270,16 +280,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D0E77A126B1342100004F35 /* MainTableViewCell.swift in Sources */,
 				8D873A6826AA9AEE00C82044 /* DatabaseManager.swift in Sources */,
 				8D0E779926AC86B100004F35 /* KeyboardToolbarButton.swift in Sources */,
 				8DD2169826A981E500D00E14 /* MainViewController.swift in Sources */,
 				8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */,
 				8D873A6A26AA9B0700C82044 /* StorageManager.swift in Sources */,
+				8D0E783E26B3781000004F35 /* MainPostTableViewCell.swift in Sources */,
 				8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */,
 				8DD2169426A981E500D00E14 /* AppDelegate.swift in Sources */,
-				8D0E77A526B1554300004F35 /* MainPostCollectionViewCell.swift in Sources */,
+				8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */,
 				8DD216A826A989F000D00E14 /* ProfileViewController.swift in Sources */,
+				8D0E784A26B5BC3D00004F35 /* Post.swift in Sources */,
+				8D0E784526B5B0E400004F35 /* I.swift in Sources */,
 				8D0E779D26AC983D00004F35 /* PostCollectionViewCell.swift in Sources */,
 				8D873A6426AA210D00C82044 /* RegisterViewController.swift in Sources */,
 				8DD216AA26A98E1600D00E14 /* LoginViewController.swift in Sources */,

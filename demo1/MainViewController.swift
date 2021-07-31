@@ -10,55 +10,39 @@ import FirebaseAuth
 
 
 class MainViewController: UIViewController {
+
+ 
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var profileImageView: UIImageView!
-    
     @IBOutlet weak var nameLabel: UILabel!
     var safeEmail = ""
+    var postsFeed:[Post] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         validateAuth()
+        getAllPosts()
+        nameLabel.text = UserDefaults.standard.string(forKey: "name")
+        safeEmail = DatabaseManager.shared.getSafeString()
+        //profile img
+        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
+        
+        tableView.register(MainPostTableViewCell.nib(), forCellReuseIdentifier: MainPostTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
-        nameLabel.text = UserDefaults.standard.string(forKey: "name")
-        safeEmail = getSafeEmail()
-        fetchImage(imageView: profileImageView)
-        tableView.register(MainTableViewCell.nib(), forCellReuseIdentifier: MainTableViewCell.identifier)
-        tableView.rowHeight = UITableView.automaticDimension
         
+//        tableView.rowHeight = UITableView.automaticDimension
+      
     }
     
-    private func fetchImage(imageView: UIImageView){
-        let fileName = "1_" + safeEmail + "_profile_picture.png"
-        let path = "image/"+fileName
-        StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
-            switch result {
-            case .success(let url):
-            self?.downloadProfileImage(imageView: imageView, url: url)
-            case.failure(let error):
-                print("Failed to get download url: \(error)")
-            }
-        })
-    }
-    private func downloadProfileImage(imageView: UIImageView, url: URL) {
-        
-        URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
-            guard let data = data, error == nil else {
-                return
-            }
-            DispatchQueue.main.async {
-                let image = UIImage(data: data)
-                self.profileImageView.image = image
-            }
-        }).resume()
-    }
+    var layout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        let width = UIScreen.main.bounds.size.width
+        layout.estimatedItemSize = CGSize(width: width, height: 10)
+        return layout
+    }()
    
-    private func getSafeEmail() -> String {
-        let email = UserDefaults.standard.string(forKey: "email")
-        let safe = DatabaseManager.safeEmail(emailAddress: email!)
-        return safe
-    }
   
     private func validateAuth(){
         
@@ -69,21 +53,54 @@ class MainViewController: UIViewController {
         }
         
     }
+    @IBAction func test(_ sender: Any) {
+        print("aaaa \(self.postsFeed.count)")
+        print(postsFeed[0].postID)
+    }
+    
+    private func getAllPosts() {
+        DatabaseManager.shared.getAllPosts( completion: {[weak self] result in
+            switch result {
+            case .success(let posts):
+                
+                DispatchQueue.main.async {
+                    self?.postsFeed = posts
+                    self?.tableView.reloadData()
+                }
+                
+            case .failure(let error):
+                print("\(error)")
+            }
+        })
+    }
+
 }
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        
+        print("bbbbb \(self.postsFeed.count)")
+        return self.postsFeed.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: MainTableViewCell.identifier, for: indexPath) as! MainTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
         
+//        downloadSingleImage(for: posts[indexPath.row].profileImage, imgview: cell.profileImageView)
+        cell.configure(with: postsFeed[indexPath.row])
+        cell.textview.text = postsFeed[indexPath.row].txt
+        cell.postownerLable.text = postsFeed[indexPath.row].owner
         return cell
     }
     
- 
+    
 }
+
+
+
+
+
+
 
 
 
