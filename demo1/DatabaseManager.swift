@@ -9,10 +9,6 @@ import Foundation
 import FirebaseDatabase
 
 final class DatabaseManager{
-    
-    public enum DatabaseError: Error {
-        case failedToFetch
-    }
     static let shared = DatabaseManager()
     private let database = Database.database().reference()
     
@@ -97,7 +93,7 @@ final class DatabaseManager{
                       let txt = i["txt"] as? String,
                       let postID = i["postID"] as? String,
                       let profileImge = i["profileImg"] as? String else {
-                    completion(.failure(DatabaseError.failedToFetch))
+                    completion(.failure(Hi.DatabaseError.failedToFetch))
                     return
                 }
                 postfeed.append(Post(postID: postID, profileImage: profileImge, owner: owner, txt: txt, image: nil))
@@ -126,13 +122,15 @@ extension DatabaseManager {
             completion(true)
         })
     }
-    public func getDataFor(path: String, completion: @escaping (Result<Any, Error>) -> Void){
-        self.database.child("\(path)").observeSingleEvent(of: .value, with: { snapshot in
-            guard let value = snapshot.value else {
-                completion(.failure(DatabaseError.failedToFetch))
+    public func getUsername(path: String, completion: @escaping (Result<Any, Error>) -> Void){
+        self.database.child("users/\(path)").observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value,
+                  let userData = value as? [String:Any],
+                  let username = userData["username"] as? String else {
+                completion(.failure(Hi.DatabaseError.observeSingleEvent))
                 return
             }
-            completion(.success(value))
+            completion(.success(username))
         })
     }
     

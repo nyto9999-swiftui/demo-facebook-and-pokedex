@@ -16,7 +16,7 @@ struct Post {
     let image: [UIImage]?
     
     var safePost: String {
-        var safePostID = postID.replacingOccurrences(of: ".", with: "-")
+        let safePostID = postID.replacingOccurrences(of: ".", with: "-")
         return safePostID
     }
 

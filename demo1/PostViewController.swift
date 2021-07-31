@@ -16,30 +16,35 @@ class PostViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var profileImageView: UIImageView!
-    
+    let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
-    let name = UserDefaults.standard.string(forKey: "name")
-    let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
+    
+    
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        nameLabel.text = name
-        
-
+        setup()
         collectionSetup()
-        fetchImage(imageView: profileImageView)
-        
-        
+    }
+    
+    private func setup(){
+        let name = UserDefaults.standard.string(forKey: "name")
+        nameLabel.text = name
+//        fetchImage(imageView: profileImageView)
+        // profile image
+        StorageManager.shared.getUIImageData(path: "image/\(safeEmail)_profile_picture.png", for: profileImageView)
     }
     
     @IBAction func camera(_ sender: Any) {
         runPicker()
     }
+    
+    
+    //MARK: fix
     private func fetchImage(imageView: UIImageView) {
         let fileName = "\(safeEmail)_profile_picture.png"
-        UserDefaults.standard.setValue(fileName, forKey: "profile_picture")
+        UserDefaults.standard.setValue(fileName, forKey: "profile_picture_url")
         let path = "image/"+fileName
         StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
             switch result {
@@ -65,28 +70,28 @@ class PostViewController: UIViewController {
     }
     /*post */
     @IBAction func sentPost(_ sender: Any) {
+        // generate unique postID
         let time = NSDate().timeIntervalSince1970
         let profileImgName = UserDefaults.standard.string(forKey: "profile_picture")
         let safeID = DatabaseManager.safeString(for: "\(safeEmail)_\(String(time))")
-        let post = Post(postID: safeID, profileImage: profileImgName!, owner: name!, txt: textView.text, image: images)
+        let post = Post(postID: safeID, profileImage: profileImgName!, owner: nameLabel.text!, txt: textView.text, image: images)
         
         print("jfladjfdasjf\(post.profileImage)")
-        DatabaseManager.shared.insertPost(with: post, completion: { [weak self] success in
+        DatabaseManager.shared.insertPost(with: post, completion: { success in
             if success {
-                var datas = [Data]()
+                var arrayData = [Data]()
                 //upload image to storage
-                
                 for img in post.image! {
                     guard let data = img.pngData() else {
                         print("png error")
                         return
                     }
                     print("send post to db")
-                    datas.append(data)
+                    arrayData.append(data)
                 }
                 
                 let filename = post.postPictureName
-                StorageManager.shared.uploadPicture(with: datas,file: post.safePost, fileName: filename, completion: { result in
+                StorageManager.shared.uploadPictures(with: arrayData, path:post.safePost, fileName: filename, completion: { result in
                     switch result {
                     case .success(let url):
                         print(url)
@@ -105,7 +110,6 @@ class PostViewController: UIViewController {
 
     func collectionSetup() -> Void{
         collectionView.frame = CGRect(x: 0,y: 0,width: view.frame.width,height: 0)
-        
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
         layout.itemSize = CGSize(width: collectionView.width/3-20, height: collectionView.width/3-20)
@@ -113,7 +117,6 @@ class PostViewController: UIViewController {
         layout.minimumInteritemSpacing = 0
         collectionView.delegate = self
         collectionView.dataSource = self
-        
         collectionView.collectionViewLayout = layout
         collectionView.register(PostCollectionViewCell.nib(), forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
     }

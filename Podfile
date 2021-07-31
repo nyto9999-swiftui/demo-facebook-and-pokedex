@@ -31,5 +31,5 @@ pod 'FBSDKLoginKit'
 pod 'MessageKit'
 pod 'JGProgressHUD'
 pod 'SDWebImage'
-pod "BSImagePicker", "~> 3.1"
+
 end

@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 extension UIAlertController {
-    
     func show() {
         present(animated: true, completion: nil)
     }

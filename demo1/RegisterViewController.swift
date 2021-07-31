@@ -17,6 +17,10 @@ class RegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup(){
         imageView.isUserInteractionEnabled = true
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapPicture))
         imageView.addGestureRecognizer(gesture)
@@ -26,9 +30,7 @@ class RegisterViewController: UIViewController {
         presentPhotoActionSheet()
     }
     
-
     @IBAction func didTapSignup(_ sender: Any) {
-        
         guard let firstname = firstNameTextfield.text,
               let lastname = lastNameTextfield.text,
               let email = emailTextfield.text,
@@ -46,7 +48,7 @@ class RegisterViewController: UIViewController {
         DatabaseManager.shared.userExists(with: email, completion: { [weak self] exist in
             // check if email exist
             guard !exist else {
-                print("invalid register")
+                print("Email exist")
                 return
             }
             // create firebase user
@@ -55,10 +57,9 @@ class RegisterViewController: UIViewController {
                     print("Firebase create user fail")
                     return
                 }
-                
                 UserDefaults.standard.setValue(email, forKey: "email")
                 UserDefaults.standard.setValue("\(firstname)\(lastname)", forKey: "name")
-                // inser user to db
+                // inser user data to db
                 let appUser = AppUser(firstName: firstname, lastName: lastname, emailAddress: email)
                 DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                     if success {
@@ -67,9 +68,9 @@ class RegisterViewController: UIViewController {
                               let data = image.pngData() else {
                             return
                         }
-                        
-                        let fileName = appUser.profilePictureName
-                        StorageManager.shared.uploadProfilePicture(with: data, file: "profile", fileName: fileName, completion: { result in
+                        let fileName = appUser.profilePictureName //"\(safeEmail)_profile_picture.png"
+                        //upload profile picture
+                        StorageManager.shared.uploadSinglePicture(with: data, path: "profile", fileName: fileName, completion: { result in
                             switch result {
                             case.success(let downloadUrl):
                                 UserDefaults.standard.set(downloadUrl, forKey: "profile_picture_url")
@@ -80,23 +81,12 @@ class RegisterViewController: UIViewController {
                         })
                     }
                 })
-                
                 self?.dismiss(animated: true, completion: nil)
-                
             })
-            
-            
         })
     }
-    
-    
-
 }
-
-//MARK: Extension
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    
-    
     func presentPhotoActionSheet() {
         let actionSheet = UIAlertController(title: "Profile Picture",
                                             message: "How would you like to select a picture?",
