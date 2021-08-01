@@ -31,10 +31,11 @@ class MainPostTableViewCell: UITableViewCell {
     }
     
     func configure(with model: Post) {
-        print("configure \(model.profileImage)")
+   
+        self.textview.text = model.txt
+        self.postownerLable.text = model.owner
         StorageManager.shared.getUIImageData(path: "profile/\(model.profileImage)", for: self.profileImageView)
         //nyto4826-yahoo-com-tw_1627658643-386545_post_picture_1.png
-        print("configure \(model.postID)/\(model.postPictureName)_1.png")
         StorageManager.shared.getUIImageData(path: "\(model.postID)/\(model.postPictureName)_1.png", for: self.postImageView)
     }
 }

@@ -1,4 +1,5 @@
 PODS:
+  - BSImagePicker (3.3.1)
   - FBSDKCoreKit (11.0.0):
     - FBSDKCoreKit/Core (= 11.0.0)
   - FBSDKCoreKit/Core (11.0.0):
@@ -107,6 +108,7 @@ PODS:
   - SDWebImage/Core (5.11.1)
 
 DEPENDENCIES:
+  - BSImagePicker (~> 3.1)
   - FBSDKCoreKit
   - FBSDKLoginKit
   - Firebase/Analytics
@@ -120,6 +122,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - BSImagePicker
     - FBSDKCoreKit
     - FBSDKCoreKit_Basics
     - FBSDKLoginKit
@@ -144,6 +147,7 @@ SPEC REPOS:
     - SDWebImage
 
 SPEC CHECKSUMS:
+  BSImagePicker: 0fe04b574d4d6b81093785d2af6c26227efc8428
   FBSDKCoreKit: 3e6f565de8b4fbe11f8ee5d499f5898b0bde2cdd
   FBSDKCoreKit_Basics: 9cf699662174870962deb39f07a5d70d4594c4b7
   FBSDKLoginKit: 0ba3e15e9bdbeb46716d0fa375e6b71c39d4c477
@@ -167,6 +171,6 @@ SPEC CHECKSUMS:
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
 
-PODFILE CHECKSUM: bd3a5dba553b7f1b3e150fd3fcf8f73e6ee5c490
+PODFILE CHECKSUM: c0acf7366064e1b5ebcada17e52f747e0b42ae64
 
 COCOAPODS: 1.10.1

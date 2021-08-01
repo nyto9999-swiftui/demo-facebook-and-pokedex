@@ -6,9 +6,9 @@
 //
 
 import UIKit
-import BSImagePicker
 import Photos
 import PhotosUI
+import BSImagePicker
 import FirebaseAuth
 class PostViewController: UIViewController {
     
@@ -20,8 +20,6 @@ class PostViewController: UIViewController {
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
     
-    
-   
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
@@ -31,52 +29,21 @@ class PostViewController: UIViewController {
     private func setup(){
         let name = UserDefaults.standard.string(forKey: "name")
         nameLabel.text = name
-//        fetchImage(imageView: profileImageView)
-        // profile image
-        StorageManager.shared.getUIImageData(path: "image/\(safeEmail)_profile_picture.png", for: profileImageView)
+        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
     }
     
     @IBAction func camera(_ sender: Any) {
-        runPicker()
+        runImagePicker()
     }
     
-    
-    //MARK: fix
-    private func fetchImage(imageView: UIImageView) {
-        let fileName = "\(safeEmail)_profile_picture.png"
-        UserDefaults.standard.setValue(fileName, forKey: "profile_picture_url")
-        let path = "image/"+fileName
-        StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
-            switch result {
-            case .success(let url):
-                self?.downloadProfileImage(imageView: imageView, url: url)
-            case .failure(let error):
-                print("Failed to get download url: \(error)")
-            }
-        })
-    }
-    private func downloadProfileImage(imageView: UIImageView, url: URL) {
-        
-        
-        URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
-            guard let data = data, error == nil else {
-                return
-            }
-            DispatchQueue.main.async {
-                let image = UIImage(data: data)
-                self.profileImageView.image = image
-            }
-        }).resume()
-    }
     /*post */
     @IBAction func sentPost(_ sender: Any) {
         // generate unique postID
         let time = NSDate().timeIntervalSince1970
-        let profileImgName = UserDefaults.standard.string(forKey: "profile_picture")
+        let profileImgName = "\(safeEmail)_profile_picture.png"
         let safeID = DatabaseManager.safeString(for: "\(safeEmail)_\(String(time))")
-        let post = Post(postID: safeID, profileImage: profileImgName!, owner: nameLabel.text!, txt: textView.text, image: images)
+        let post = Post(postID: safeID, profileImage: profileImgName, owner: nameLabel.text!, txt: textView.text, image: images)
         
-        print("jfladjfdasjf\(post.profileImage)")
         DatabaseManager.shared.insertPost(with: post, completion: { success in
             if success {
                 var arrayData = [Data]()
@@ -121,7 +88,7 @@ class PostViewController: UIViewController {
         collectionView.register(PostCollectionViewCell.nib(), forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
     }
     
-    func runPicker() {
+    func runImagePicker() {
         let imagePicker = ImagePickerController()
         
         presentImagePicker(imagePicker, select: { (asset: PHAsset) -> Void in

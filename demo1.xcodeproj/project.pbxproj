@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8D0E779926AC86B100004F35 /* KeyboardToolbarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */; };
 		8D0E779D26AC983D00004F35 /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E779B26AC983D00004F35 /* PostCollectionViewCell.swift */; };
 		8D0E779E26AC983D00004F35 /* PostCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D0E779C26AC983D00004F35 /* PostCollectionViewCell.xib */; };
 		8D0E783E26B3781000004F35 /* MainPostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E783C26B3781000004F35 /* MainPostTableViewCell.swift */; };
@@ -37,7 +36,6 @@
 		477820BE2A7E3D480B1FC5A4 /* Pods-demo1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo1.release.xcconfig"; path = "Target Support Files/Pods-demo1/Pods-demo1.release.xcconfig"; sourceTree = "<group>"; };
 		640150FD8150C0CB787E55B4 /* Pods-demo1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo1.debug.xcconfig"; path = "Target Support Files/Pods-demo1/Pods-demo1.debug.xcconfig"; sourceTree = "<group>"; };
 		799038A1FB43758EE56C927B /* Pods_demo1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_demo1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardToolbarButton.swift; sourceTree = "<group>"; };
 		8D0E779B26AC983D00004F35 /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		8D0E779C26AC983D00004F35 /* PostCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostCollectionViewCell.xib; sourceTree = "<group>"; };
 		8D0E783C26B3781000004F35 /* MainPostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPostTableViewCell.swift; sourceTree = "<group>"; };
@@ -104,6 +102,27 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		8D0E784D26B6107B00004F35 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8DD216A926A98E1600D00E14 /* LoginViewController.swift */,
+				8D873A6326AA210D00C82044 /* RegisterViewController.swift */,
+				8D78A9D726ABFF23006F538D /* PostViewController.swift */,
+				8DD2169726A981E500D00E14 /* MainViewController.swift */,
+				8DD216A726A989F000D00E14 /* ProfileViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		8D0E784E26B610BC00004F35 /* DB */ = {
+			isa = PBXGroup;
+			children = (
+				8D873A6726AA9AEE00C82044 /* DatabaseManager.swift */,
+				8D873A6926AA9B0700C82044 /* StorageManager.swift */,
+			);
+			path = DB;
+			sourceTree = "<group>";
+		};
 		8DD2168726A981E500D00E14 = {
 			isa = PBXGroup;
 			children = (
@@ -125,24 +144,18 @@
 		8DD2169226A981E500D00E14 /* demo1 */ = {
 			isa = PBXGroup;
 			children = (
+				8DD2169926A981E500D00E14 /* Main.storyboard */,
+				8D0E784E26B610BC00004F35 /* DB */,
+				8D0E784D26B6107B00004F35 /* ViewController */,
 				8D0E784626B5BC1E00004F35 /* Model */,
 				8D0E779A26AC97FD00004F35 /* Cell */,
 				8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */,
 				8DD2169326A981E500D00E14 /* AppDelegate.swift */,
 				8DD2169526A981E500D00E14 /* SceneDelegate.swift */,
-				8DD2169726A981E500D00E14 /* MainViewController.swift */,
-				8DD2169926A981E500D00E14 /* Main.storyboard */,
 				8DD2169C26A981E500D00E14 /* Assets.xcassets */,
 				8DD2169E26A981E500D00E14 /* LaunchScreen.storyboard */,
 				8DD216A126A981E500D00E14 /* Info.plist */,
-				8DD216A726A989F000D00E14 /* ProfileViewController.swift */,
-				8DD216A926A98E1600D00E14 /* LoginViewController.swift */,
-				8D873A6326AA210D00C82044 /* RegisterViewController.swift */,
 				8D873A6526AA9A8600C82044 /* UI + Extension.swift */,
-				8D873A6726AA9AEE00C82044 /* DatabaseManager.swift */,
-				8D873A6926AA9B0700C82044 /* StorageManager.swift */,
-				8D78A9D726ABFF23006F538D /* PostViewController.swift */,
-				8D0E779826AC86B100004F35 /* KeyboardToolbarButton.swift */,
 				8D0E784426B5B0E400004F35 /* Hi.swift */,
 			);
 			path = demo1;
@@ -281,7 +294,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D873A6826AA9AEE00C82044 /* DatabaseManager.swift in Sources */,
-				8D0E779926AC86B100004F35 /* KeyboardToolbarButton.swift in Sources */,
 				8DD2169826A981E500D00E14 /* MainViewController.swift in Sources */,
 				8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */,
 				8D873A6A26AA9B0700C82044 /* StorageManager.swift in Sources */,

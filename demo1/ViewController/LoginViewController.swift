@@ -23,6 +23,7 @@ class LoginViewController: UIViewController {
         emailTextfield.textfieldImage(imageName: "envelope")
         passwordTextfield.textfieldImage(imageName: "key")
     }
+
     
     @IBAction func didTapFacebook(_ sender: Any) {
         let loginButton = FBLoginButton()
