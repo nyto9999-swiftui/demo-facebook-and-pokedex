@@ -45,34 +45,11 @@ class PostViewController: UIViewController {
         let post = Post(postID: safeID, profileImage: profileImgName, owner: nameLabel.text!, txt: textView.text, image: images)
         
         DatabaseManager.shared.insertPost(with: post, completion: { success in
-            if success {
-                var arrayData = [Data]()
-                //upload image to storage
-                for img in post.image! {
-                    guard let data = img.pngData() else {
-                        print("png error")
-                        return
-                    }
-                    print("send post to db")
-                    arrayData.append(data)
-                }
-                
-                let filename = post.postPictureName
-                StorageManager.shared.uploadPictures(with: arrayData, path:post.safePost, fileName: filename, completion: { result in
-                    switch result {
-                    case .success(let url):
-                        print(url)
-                    case .failure(let error):
-                        print(error)
-                    }
-                })
-            }
+            guard success == true else { print("failed to insert post"); return}
         })
         textView.text = ""
         images = [UIImage]()
         self.dismiss(animated: true)
-        
-        
     }
 
     func collectionSetup() -> Void{

@@ -59,17 +59,114 @@ final class StorageManager {
         })
     }
     
-    public func getUIImageData(path: String, for imgview: UIImageView) -> Void{
+    
+    
+    public func getIMG(path: String, completion: @escaping (Result<Data, Error>) -> Void){
+        
         let ref = StorageManager.shared.reference.reference(withPath: path)
         ref.getData(maxSize: 1 * 10240 * 10240, completion: { data, error in
             guard let data = data else {
                 print(error ?? "failed to get UIimage Data")
+                completion(.failure(error!))
                 return
             }
-            imgview.image = UIImage(data: data)
+            completion(.success(data))
         })
     }
+    public func dowloadImage(){
+        let ref = StorageManager.shared.reference.reference().child("nyto4826-yahoo-com-tw_1628163398-7236362/")
+        ref.listAll { result, err in
+            if err != nil {
+                print("error")
+            }
+            for prefix in result.prefixes {
+                print(prefix)
+            }
+            for item in result.items {
+                print("itemitem\(item)")
+            }
+        }
+    }
     
+    //get image
+    public func getUIImageData(path: String, for imgview: UIImageView) -> Void{
+           let ref = StorageManager.shared.reference.reference(withPath: path)
+           ref.getData(maxSize: 1 * 10240 * 10240, completion: { data, error in
+               guard let data = data else {
+                   print(error ?? "failed to get UIimage Data")
+                   return
+               }
+               imgview.image = UIImage(data: data)
+           })
+       }
     
+    // get image for cell
+    var imagePath: String?
+    let imageCache = NSCache<NSString, UIImage>()
+    public func getUIImageForCell(path: String, imgview: UIImageView) -> Void{
+        imagePath = path
+        imgview.image = nil
+        
+        let ref = StorageManager.shared.reference.reference(withPath: path)
+        
+        if let imageFromCache = imageCache.object(forKey: path as NSString)
+        {
+            imgview.image = imageFromCache
+            return
+        }
+        ref.getData(maxSize: 1 * 10240 * 10240, completion: {[weak self] data, error in
+            guard let data = data else {
+                print(error ?? "failed to get UIimage Data")
+                return
+            }
+            DispatchQueue.main.async {
+                let imgToCache = UIImage(data: data)
+                
+                if self?.imagePath == path {
+                    imgview.image = imgToCache
+                }
+                self?.imageCache.setObject(imgToCache!, forKey: path as NSString)
+                imgview.image = imgToCache
+            }
+        })
+    }
    
 }
+
+class CustomImageView: UIImageView {
+    let imageCache = NSCache<NSString, UIImage>()
+    var tmp: String?
+    
+    func getUIImageData(path: String) -> Void{
+        let ref = StorageManager.shared.reference.reference(withPath: path)
+        
+        image = nil
+        
+        if let imageFromCache = imageCache.object(forKey: path as NSString)
+        {
+            self.image = imageFromCache
+            return
+        }
+        
+        ref.getData(maxSize: 1 * 10240 * 10240, completion: { data, error in
+            
+            guard let data = data else {
+                print(error ?? "failed to get UIimage Data")
+                return
+            }
+            DispatchQueue.main.async {
+                
+                let imgToCache = UIImage(data: data)
+                
+                if self.tmp == path {
+                    self.image = imgToCache
+                }
+                
+                self.imageCache.setObject(imgToCache!, forKey: path as NSString)
+                
+                self.image = imgToCache
+            }
+        })
+    }
+}
+

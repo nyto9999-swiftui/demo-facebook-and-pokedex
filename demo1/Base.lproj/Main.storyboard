@@ -88,7 +88,7 @@
                                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="32v-2O-KFA">
                                                 <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cVH-oQ-ran">
+                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="cVH-oQ-ran" customClass="PostCollectionViewCell" customModule="demo1" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="120" height="120"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </collectionViewCellContentView>
@@ -638,6 +638,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ShR-JW-6wi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4395.652173913044" y="-975"/>
+        </scene>
+        <!--Comment View Controller-->
+        <scene sceneID="gch-NN-xy7">
+            <objects>
+                <viewController storyboardIdentifier="CommentViewController" id="6fn-m2-U9b" customClass="CommentViewController" customModule="demo1" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yzB-rL-eGj">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wvj-Jh-lVA">
+                                <rect key="frame" x="5" y="69" width="414" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="HNX-qJ-ccz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pXE-JD-aeH">
+                                <rect key="frame" x="0.0" y="137" width="414" height="725"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="mlF-b2-vEV"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="pXE-JD-aeH" firstAttribute="bottom" secondItem="mlF-b2-vEV" secondAttribute="bottom" id="8A2-Do-V5I"/>
+                            <constraint firstItem="pXE-JD-aeH" firstAttribute="trailing" secondItem="mlF-b2-vEV" secondAttribute="trailing" id="VMl-Wk-FcO"/>
+                            <constraint firstItem="wvj-Jh-lVA" firstAttribute="leading" secondItem="mlF-b2-vEV" secondAttribute="leading" constant="5" id="eZh-U5-Hpu"/>
+                            <constraint firstItem="wvj-Jh-lVA" firstAttribute="top" secondItem="mlF-b2-vEV" secondAttribute="top" constant="25" id="mia-ZT-QQ6"/>
+                            <constraint firstItem="pXE-JD-aeH" firstAttribute="leading" secondItem="mlF-b2-vEV" secondAttribute="leading" id="s4z-Jb-7mG"/>
+                            <constraint firstItem="pXE-JD-aeH" firstAttribute="top" secondItem="wvj-Jh-lVA" secondAttribute="bottom" constant="8" symbolic="YES" id="seU-eN-FBH"/>
+                            <constraint firstItem="wvj-Jh-lVA" firstAttribute="trailing" secondItem="mlF-b2-vEV" secondAttribute="trailing" constant="5" id="z8G-DM-Uul"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="comment" destination="wvj-Jh-lVA" id="TGd-JL-T2y"/>
+                        <outlet property="tableview" destination="pXE-JD-aeH" id="up8-IV-6hu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LbC-zR-eJw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5453.6231884057979" y="-975"/>
         </scene>
     </scenes>
     <resources>

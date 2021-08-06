@@ -15,20 +15,17 @@ class MainViewController: UIViewController {
     @IBOutlet weak var nameLabel: UILabel!
     var postsFeed:[Post] = []
     let refreshControl = UIRefreshControl()
+    let safeEmail = DatabaseManager.shared.getSafeString()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        //if not  users, back to login vc
         validateAuth()
-        //get all posts from firebase postwall
         setup()
-    }
-    override func viewDidAppear(_ animated: Bool) {
-        nameLabel.text = UserDefaults.standard.string(forKey: "name")
-        let safeEmail = DatabaseManager.shared.getSafeString()
-        //download profile img from db
-        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
         getAllPosts()
+        
     }
+    
+    //if not  users, back to login vc
     private func validateAuth(){
         if FirebaseAuth.Auth.auth().currentUser == nil {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -36,37 +33,48 @@ class MainViewController: UIViewController {
             present(vc, animated: true)
         }
     }
+    
     private func setup() {
+        nameLabel.text = UserDefaults.standard.string(forKey: "name")
+        //download profile img from db
+        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
        
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        
         
         tableView.register(MainPostTableViewCell.nib(), forCellReuseIdentifier: MainPostTableViewCell.identifier)
         tableView.addSubview(refreshControl)
         tableView.delegate = self
         tableView.dataSource = self
-    }
-    private func getAllPosts() {
-        DatabaseManager.shared.getAllPosts( completion: {[weak self] result in
-            switch result {
-            case .success(let posts):
-                DispatchQueue.main.async {
-                    self?.postsFeed = posts
-                    self?.tableView.reloadData()
-                    self?.refreshControl.endRefreshing()
-                }
-            case .failure(let error):
-                print("\(error)")
-                self?.refreshControl.endRefreshing()
-            }
-        })
+        getAllPosts()
+        
     }
     @objc func refresh(_ sender: AnyObject){
         getAllPosts()
+        refreshControl.endRefreshing()
+        tableView.reloadData()
     }
+    
+    private func getAllPosts() {
+        DatabaseManager.shared.getAllPosts( completion: {[weak self] gotPosts in
+            switch gotPosts {
+            case .success(let posts):
+                guard posts.count == self?.postsFeed.count else {
+                    self?.postsFeed = posts
+                    self?.postsFeed.sort { $0.postID < $1.postID}
+                    self?.tableView.reloadData()
+                    return
+                }
+            case .failure(let error):
+                self?.postsFeed = []
+                print(error)
+            }
+        })
+    }
+    
     @IBAction func test(_ sender: Any) {
-        print("aaaa \(self.postsFeed.count)")
-        print(postsFeed[0].postID)
+        print(postsFeed.count)
     }
 }
 
@@ -77,8 +85,24 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
+        
         cell.configure(with: postsFeed[indexPath.row])
+        cell.commentButton.tag = indexPath.row
+        cell.commentButton.addTarget(self, action: #selector(goComment), for: UIControl.Event.touchUpInside)
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    }
+    
+    @objc func goComment(sender: UIButton) {
+        UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
+        UserDefaults.standard.setValue("profile/\(safeEmail)_profile_picture.png", forKey: "senderIcon")
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(identifier: "CommentViewController") as! CommentViewController
+        present(vc, animated: true)
     }
 }
 

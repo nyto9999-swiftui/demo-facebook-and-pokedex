@@ -13,7 +13,8 @@ struct Post {
     let profileImage: String
     let owner: String
     let txt: String
-    let image: [UIImage]?
+    var image: [UIImage]?
+    
     
     var safePost: String {
         let safePostID = postID.replacingOccurrences(of: ".", with: "-")
