@@ -14,6 +14,8 @@ class MainViewController: UIViewController {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
     var postsFeed:[Post] = []
+    var test:[Comment] = []
+    var array:[String] = []
     let refreshControl = UIRefreshControl()
     let safeEmail = DatabaseManager.shared.getSafeString()
     
@@ -73,8 +75,12 @@ class MainViewController: UIViewController {
         })
     }
     
+    
+    
     @IBAction func test(_ sender: Any) {
-        print(postsFeed.count)
+        let time = Date().timeIntervalSince1970
+        
+        
     }
 }
 
@@ -98,7 +104,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     @objc func goComment(sender: UIButton) {
         UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
+        print(sender.tag)
         UserDefaults.standard.setValue("profile/\(safeEmail)_profile_picture.png", forKey: "senderIcon")
+        print(postsFeed[sender.tag].postID)
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "CommentViewController") as! CommentViewController

@@ -134,6 +134,8 @@ final class DatabaseManager{
             }
         }
     }
+    
+    //check like
     public func checkLike(for post: String, clicker:String, completion: @escaping ((Bool) -> Void)) {
         database.child("postwall/\(post)/like").observe(.value, with: {snapshot in
             //empty
@@ -153,16 +155,42 @@ final class DatabaseManager{
     
     //insert comment
     public func insertComment(for post: String, comment: Comment) {
+        let time = NSDate().timeIntervalSince1970
         
         let newComment: [String: Any] = [
-            "postID":post,
             "owner":comment.sender,
             "txt":comment.txt,
-            "senderIcon":comment.senderIcon
+            "senderIcon":comment.senderIcon,
+            "createdAt":String(time)
         ]
-        self.database.child("comments/\(post)").setValue(newComment)
+        self.database.child("comments/\(post)/\(comment.commentID)").setValue(newComment)
     }
     
+    // get all comments
+    public func getAllComments(for path: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+        database.child("comments/\(path)").observe(.value, with: { post in
+            var comments = [Comment]()
+            
+            for comment in post.children {
+                if let comment = comment as? DataSnapshot {
+                    guard let dict = comment.value as? [String: Any] else {
+                        print("no value")
+                        completion(.failure(Hi.DatabaseError.failedToGetData))
+                        return
+                    }
+                    guard let sender = dict["owner"] as? String,
+                          let senderIcon = dict["senderIcon"] as? String,
+                          let txt = dict["txt"] as? String,
+                          let createdAt = dict["createdAt"] as? String else {
+                        print("errrror")
+                        return
+                    }
+                    comments.append(Comment(commentID: comment.key, postID: path, sender: sender, txt: txt, senderIcon: senderIcon, createdAt: createdAt))
+                }
+            }
+            completion(.success(comments))
+        })
+    }
     
     public func hi() {
         let like:[String] = ["tony","chen","宇亘陳"]
