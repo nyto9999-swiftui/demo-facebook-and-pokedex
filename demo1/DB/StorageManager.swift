@@ -87,6 +87,14 @@ final class StorageManager {
             }
         }
     }
+    //remove post image
+    public func removePostImage(path: String){
+        storage.storage.reference().child(path).listAll {[weak self] Result, err in
+            for item in Result.items {
+                self?.storage.child("\(path)/\(item.name)").delete()
+            }
+        }
+    }
     
     //get image
     public func getUIImageData(path: String, for imgview: UIImageView) -> Void{

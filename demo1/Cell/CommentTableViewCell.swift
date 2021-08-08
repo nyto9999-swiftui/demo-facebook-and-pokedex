@@ -36,24 +36,44 @@ class CommentTableViewCell: UITableViewCell {
         //MARK: fix time difference
         self.name.text = CommentFeed?.sender
         self.txt.text = CommentFeed?.txt
+        
+        //time difference
         let time = CommentFeed?.createdAt
+        let difference = dateformatter(date: Double(time!)!)
+        if difference != nil {
+            self.createdAt.text = difference
+        }
         
-        let date = Date(timeIntervalSinceReferenceDate: Double(time!)!)
-        let df = DateFormatter()
-        df.dateFormat = "yyyy/MM/dd hh:mm:ss"
-        self.createdAt.text = df.string(from: date)
-        
+        //Icon image
         if let senderIconString = CommentFeed?.senderIcon {
             StorageManager.shared.getUIImageForCell(path: senderIconString, imgview: self.imageview)
         }
     }
     
-    
-}
-extension Date {
+    func dateformatter(date: Double) -> String {
 
-    static func - (lhs: Date, rhs: Date) -> TimeInterval {
-        return lhs.timeIntervalSinceReferenceDate - rhs.timeIntervalSinceReferenceDate
+        let date1:Date = Date() // Same you did before with timeNow variable
+        let date2: Date = Date(timeIntervalSince1970: date)
+
+        let calender:Calendar = Calendar.current
+        let components: DateComponents = calender.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date2, to: date1)
+        print(components)
+        var returnString:String = ""
+        
+        if components.year! >= 1 {
+            returnString = String(describing: components.year!)+"  年前"
+        }else if components.month! >= 1{
+            returnString = String(describing: components.month!)+" 個月前"
+        }else if components.day! >= 1{
+            returnString = String(describing: components.day!) + " 天前"
+        }else if components.hour! >= 1{
+            returnString = String(describing: components.hour!) + " 小時前"
+        }else if components.minute! >= 1{
+            returnString = String(describing: components.minute!) + " 分鐘前"
+        }else if components.second! >= 1{
+            returnString = "剛剛"
+        }
+
+        return returnString
     }
-
 }

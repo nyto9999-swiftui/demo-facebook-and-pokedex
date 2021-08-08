@@ -126,17 +126,25 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6ev-BX-Urd">
+                        <rect key="frame" x="329" y="20" width="30" height="30"/>
+                        <state key="normal">
+                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25" scale="default"/>
+                        </state>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="HtU-IM-wqp" secondAttribute="bottom" id="2Ll-hI-jwV"/>
                     <constraint firstAttribute="trailing" secondItem="fU1-ip-PHJ" secondAttribute="trailing" id="31a-DE-e6b"/>
                     <constraint firstItem="v01-WI-61u" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="CNr-os-Zhh"/>
+                    <constraint firstAttribute="trailing" secondItem="6ev-BX-Urd" secondAttribute="trailing" constant="10" id="MZ5-vA-RRT"/>
                     <constraint firstItem="n5g-mq-j8m" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="35" id="ORZ-1h-cTY"/>
                     <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="n5g-mq-j8m" secondAttribute="trailing" constant="243" id="UTv-fR-U2M"/>
                     <constraint firstItem="v01-WI-61u" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="WHs-h2-ahh"/>
                     <constraint firstItem="HtU-IM-wqp" firstAttribute="top" secondItem="fU1-ip-PHJ" secondAttribute="bottom" constant="3" id="XSn-ow-CiE"/>
                     <constraint firstItem="n5g-mq-j8m" firstAttribute="leading" secondItem="v01-WI-61u" secondAttribute="trailing" constant="8" symbolic="YES" id="cMg-nH-IP2"/>
                     <constraint firstItem="fU1-ip-PHJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="g8J-mN-BtK"/>
+                    <constraint firstItem="6ev-BX-Urd" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="hYp-4u-Xvw"/>
                     <constraint firstAttribute="trailing" secondItem="HtU-IM-wqp" secondAttribute="trailing" id="kMx-mu-h0y"/>
                     <constraint firstItem="HtU-IM-wqp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="qvl-Uv-pfa"/>
                     <constraint firstItem="fU1-ip-PHJ" firstAttribute="top" secondItem="v01-WI-61u" secondAttribute="bottom" constant="8" symbolic="YES" id="uAW-LD-gHv"/>
@@ -145,6 +153,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="commentButton" destination="eFq-VK-AhR" id="NHT-Ix-sjX"/>
+                <outlet property="deleteButton" destination="6ev-BX-Urd" id="Om9-RB-FWc"/>
                 <outlet property="likeButton" destination="4t4-bV-lTz" id="FuK-gh-lr5"/>
                 <outlet property="postImageView" destination="fU1-ip-PHJ" id="Gek-Gx-RFj"/>
                 <outlet property="postownerLable" destination="n5g-mq-j8m" id="9ff-bk-Ab9"/>

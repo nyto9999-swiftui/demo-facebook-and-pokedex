@@ -9,6 +9,7 @@ import UIKit
 
 class MainPostTableViewCell: UITableViewCell {
     @IBOutlet weak var commentButton: UIButton!
+    @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var textview: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
@@ -61,15 +62,25 @@ class MainPostTableViewCell: UITableViewCell {
         self.postownerLable.text = postFeed?.owner
         
         
+        //icon image
         if let path = postFeed?.profileImage {
             StorageManager.shared.getUIImageForCell(path: "profile/\(path)", imgview: self.profileImageView)
         }
         
+        //image view
         if let pID = postFeed?.postID, let Extension = postFeed?.postPictureName {
             StorageManager.shared.getUIImageForCell(path: "\(pID)/\(Extension)_1.png", imgview: self.postImageView)
         }
         
+        // delete button
+        if postFeed?.owner != user! {
+            self.deleteButton.setImage(UIImage(systemName: ""), for: .normal)
+        }
+        else {
+            self.deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        }
         
+        // like button
         DatabaseManager.shared.checkLike(for: postFeed!.postID, clicker: user!) { click in
             if click {
                 self.likeButton.setImage(UIImage(systemName: "hand.thumbsup.fill"), for: .normal)

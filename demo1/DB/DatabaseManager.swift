@@ -97,6 +97,21 @@ final class DatabaseManager{
         })
         
     }
+    
+    //delete post
+    public func deletePost(for path: String){
+        self.database.child("postwall/\(path)").removeValue() { err,_  in
+            if err != nil {
+                print(err)
+            }
+        }
+        self.database.child("comments/\(path)").removeValue() { _, err in
+            if err != nil {
+                print(err)
+            }
+        }
+    }
+    
     //insert like
     public func insertLike(path: String, clicker: String, completion: @escaping ((Bool) -> Void)) {
         database.child("postwall/\(path)/like").observeSingleEvent(of: .value, with: { snapshot in

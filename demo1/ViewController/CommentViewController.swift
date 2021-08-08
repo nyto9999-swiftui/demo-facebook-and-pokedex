@@ -32,6 +32,7 @@ class CommentViewController: UIViewController {
         
         
         tableview.register(CommentTableViewCell.nib(), forCellReuseIdentifier: CommentTableViewCell.identifier)
+        
         tableview.delegate = self
         tableview.dataSource = self
     }
@@ -86,6 +87,7 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableview.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         
         cell.configure(with: CommentFeed[indexPath.row])
+        
         return cell
     }
 }

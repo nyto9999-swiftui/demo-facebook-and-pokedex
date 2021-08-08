@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+
     var postsFeed:[Post] = []
     var test:[Comment] = []
     var array:[String] = []
@@ -78,7 +79,7 @@ class MainViewController: UIViewController {
     
     
     @IBAction func test(_ sender: Any) {
-        let time = Date().timeIntervalSince1970
+        StorageManager.shared.removePostImage(path: "nyto4826-yahoo-com-tw_1628422340-713126/")
         
         
     }
@@ -93,14 +94,29 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
         
         cell.configure(with: postsFeed[indexPath.row])
+        
+        //comment button
         cell.commentButton.tag = indexPath.row
         cell.commentButton.addTarget(self, action: #selector(goComment), for: UIControl.Event.touchUpInside)
+        
+    
+        //delete button
+        cell.deleteButton.tag = indexPath.row
+        cell.deleteButton.addTarget(self, action: #selector(goDelete), for: UIControl.Event.touchUpInside)
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
     }
+    @objc func goDelete(sender: UIButton){
+        DatabaseManager.shared.deletePost(for: postsFeed[sender.tag].postID)
+        StorageManager.shared.removePostImage(path: postsFeed[sender.tag].postID)
+        postsFeed.remove(at: sender.tag)
+        tableView.reloadData()
+    }
+    
     
     @objc func goComment(sender: UIButton) {
         UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
