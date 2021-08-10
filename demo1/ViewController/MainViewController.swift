@@ -7,25 +7,27 @@
 import UIKit
 import SwiftUI
 import FirebaseAuth
+import FBSDKLoginKit
 
 
 class MainViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-
     var postsFeed:[Post] = []
     var test:[Comment] = []
     var array:[String] = []
     let refreshControl = UIRefreshControl()
     let safeEmail = DatabaseManager.shared.getSafeString()
+    let zoomImageview = UIView()
+    let startingFrame = CGRect(x: 50,y: 50,width: 200,height: 100)
     
     override func viewDidLoad() {
         super.viewDidLoad()
+      
         validateAuth()
         setup()
         getAllPosts()
-        
     }
     
     //if not  users, back to login vc
@@ -39,13 +41,20 @@ class MainViewController: UIViewController {
     
     private func setup() {
         nameLabel.text = UserDefaults.standard.string(forKey: "name")
+        
         //download profile img from db
         StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
-       
+        
+        //profile imageview tapgesture
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapProfileImage))
+        profileImageView.isUserInteractionEnabled = true
+        profileImageView.addGestureRecognizer(gesture)
+        
+        //refresh
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         
-        
+        //tableview
         tableView.register(MainPostTableViewCell.nib(), forCellReuseIdentifier: MainPostTableViewCell.identifier)
         tableView.addSubview(refreshControl)
         tableView.delegate = self
@@ -53,6 +62,8 @@ class MainViewController: UIViewController {
         getAllPosts()
         
     }
+    
+    
     @objc func refresh(_ sender: AnyObject){
         getAllPosts()
         refreshControl.endRefreshing()
@@ -76,12 +87,8 @@ class MainViewController: UIViewController {
         })
     }
     
-    
-    
     @IBAction func test(_ sender: Any) {
-        StorageManager.shared.removePostImage(path: "nyto4826-yahoo-com-tw_1628422340-713126/")
-        
-        
+   
     }
 }
 
@@ -92,7 +99,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
-        
+        cell.postImageView.isUserInteractionEnabled = true
         cell.configure(with: postsFeed[indexPath.row])
         
         //comment button
@@ -103,21 +110,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         //delete button
         cell.deleteButton.tag = indexPath.row
         cell.deleteButton.addTarget(self, action: #selector(goDelete), for: UIControl.Event.touchUpInside)
-        
+
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    }
+    // cellForRowAt buttons
     @objc func goDelete(sender: UIButton){
         DatabaseManager.shared.deletePost(for: postsFeed[sender.tag].postID)
         StorageManager.shared.removePostImage(path: postsFeed[sender.tag].postID)
         postsFeed.remove(at: sender.tag)
         tableView.reloadData()
     }
-    
-    
+
     @objc func goComment(sender: UIButton) {
         UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
         print(sender.tag)
@@ -127,6 +131,63 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "CommentViewController") as! CommentViewController
         present(vc, animated: true)
+    }
+    
+   
+    
+
+}
+
+extension MainViewController:UIScrollViewDelegate{
+    @objc func didTapProfileImage(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        //log out
+        let action = UIAlertAction(title: "Logout", style: .default, handler: { UIAlertAction in
+            if AccessToken.current != nil {
+                let loginManager = LoginManager()
+                loginManager.logOut()
+            }
+            do {
+                try FirebaseAuth.Auth.auth().signOut()
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(identifier: "LoginViewController") as! LoginViewController
+                self.present(vc, animated: true)
+            } catch  {
+                print("Failed to log out")
+            }
+        })
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: {
+            alert.view.superview?.isUserInteractionEnabled = true
+            alert.view.superview?.subviews[0].addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.alertSheetDismiss)))
+        })
+    }
+    @objc func alertSheetDismiss(){
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0{
+            //scrolling down
+            changeTabBar(hidden: true, animated: true)
+        }
+        else{
+            //scrolling up
+            changeTabBar(hidden: false, animated: true)
+        }
+    }
+
+    func changeTabBar(hidden:Bool, animated: Bool){
+        let tabBar = self.tabBarController?.tabBar
+        let offset = (hidden ? UIScreen.main.bounds.size.height : UIScreen.main.bounds.size.height - (tabBar?.frame.size.height)! )
+        if offset == tabBar?.frame.origin.y {return}
+        print("changing origin y position")
+        let duration:TimeInterval = (animated ? 0.5 : 0.0)
+        UIView.animate(withDuration: duration,
+                       animations: {tabBar!.frame.origin.y = offset},
+                       completion:nil)
     }
 }
 

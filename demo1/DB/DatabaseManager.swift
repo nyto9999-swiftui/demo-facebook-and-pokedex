@@ -42,7 +42,8 @@ final class DatabaseManager{
             "owner":post.owner,
             "txt":post.txt,
             "postID":post.postID,
-            "profileImg": post.profileImage
+            "profileImg": post.profileImage,
+            "imageCount": post.imageCount
         ]
         self.database.child("postwall/\(post.postID)").setValue(newPost) {   (error:Error?, ref:DatabaseReference) in
             guard error == nil else {
@@ -50,7 +51,8 @@ final class DatabaseManager{
                 completion(false)
                 return
             }
-        }//MARK: fix
+        }
+        //MARK: fix
         var arrayData = [Data]()
         //upload image to storage
         for img in post.image! {
@@ -87,11 +89,12 @@ final class DatabaseManager{
                 guard
                     let owner = p.value["owner"] as? String,
                     let profileImage = p.value["profileImg"] as? String,
-                    let txt = p.value["txt"] as? String else {
+                    let txt = p.value["txt"] as? String,
+                    let imageCount = p.value["imageCount"] as? Int else {
                     print("fail to get all post")
                     return
                 }
-                Feed.append(Post(postID: p.key, profileImage: profileImage, owner: owner, txt: txt, image: nil))
+                Feed.append(Post(postID: p.key, profileImage: profileImage, owner: owner, txt: txt, image: nil, imageCount: imageCount))
             }
             completion(.success(Feed))
         })

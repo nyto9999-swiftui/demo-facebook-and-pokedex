@@ -16,6 +16,7 @@ class PostViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var profileImageView: UIImageView!
+    
     let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
@@ -30,6 +31,7 @@ class PostViewController: UIViewController {
         let name = UserDefaults.standard.string(forKey: "name")
         nameLabel.text = name
         StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
+        
     }
     
     @IBAction func camera(_ sender: Any) {
@@ -39,17 +41,19 @@ class PostViewController: UIViewController {
     /*post */
     @IBAction func sentPost(_ sender: Any) {
         // generate unique postID
-        let time = NSDate().timeIntervalSince1970
+        let time = Date().timeIntervalSince1970
         let profileImgName = "\(safeEmail)_profile_picture.png"
         let safeID = DatabaseManager.safeString(for: "\(safeEmail)_\(String(time))")
-        let post = Post(postID: safeID, profileImage: profileImgName, owner: nameLabel.text!, txt: textView.text, image: images)
+        let post = Post(postID: safeID, profileImage: profileImgName, owner: nameLabel.text!, txt: textView.text, image: images, imageCount: images.count)
         
         DatabaseManager.shared.insertPost(with: post, completion: { success in
             guard success == true else { print("failed to insert post"); return}
         })
+        
         textView.text = ""
         images = [UIImage]()
-        self.dismiss(animated: true)
+        
+        
     }
 
     func collectionSetup() -> Void{

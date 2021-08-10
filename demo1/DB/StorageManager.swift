@@ -60,33 +60,9 @@ final class StorageManager {
     }
     
     
+  
     
-    public func getIMG(path: String, completion: @escaping (Result<Data, Error>) -> Void){
-        
-        let ref = StorageManager.shared.reference.reference(withPath: path)
-        ref.getData(maxSize: 1 * 10240 * 10240, completion: { data, error in
-            guard let data = data else {
-                print(error ?? "failed to get UIimage Data")
-                completion(.failure(error!))
-                return
-            }
-            completion(.success(data))
-        })
-    }
-    public func dowloadImage(){
-        let ref = StorageManager.shared.reference.reference().child("nyto4826-yahoo-com-tw_1628163398-7236362/")
-        ref.listAll { result, err in
-            if err != nil {
-                print("error")
-            }
-            for prefix in result.prefixes {
-                print(prefix)
-            }
-            for item in result.items {
-                print("itemitem\(item)")
-            }
-        }
-    }
+    
     //remove post image
     public func removePostImage(path: String){
         storage.storage.reference().child(path).listAll {[weak self] Result, err in
@@ -95,6 +71,8 @@ final class StorageManager {
             }
         }
     }
+    
+    
     
     //get image
     public func getUIImageData(path: String, for imgview: UIImageView) -> Void{
@@ -113,7 +91,7 @@ final class StorageManager {
     let imageCache = NSCache<NSString, UIImage>()
     public func getUIImageForCell(path: String, imgview: UIImageView) -> Void{
         imagePath = path
-        imgview.image = nil
+//        imgview.image = nil
         
         let ref = StorageManager.shared.reference.reference(withPath: path)
         
@@ -138,6 +116,8 @@ final class StorageManager {
             }
         })
     }
+    
+   
    
 }
 
@@ -176,5 +156,8 @@ class CustomImageView: UIImageView {
             }
         })
     }
+    
+    
+    
 }
 

@@ -30,7 +30,7 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </imageView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fU1-ip-PHJ">
+                    <imageView clipsSubviews="YES" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fU1-ip-PHJ">
                         <rect key="frame" x="0.0" y="78" width="369" height="288"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="288" id="cKJ-6X-32H"/>

@@ -10,46 +10,17 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Profile View Controller-->
+        <!--Chat View Controller-->
         <scene sceneID="LM0-Dy-oRw">
             <objects>
-                <viewController id="aKT-eg-ZGb" customClass="ProfileViewController" customModule="demo1" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aKT-eg-ZGb" customClass="ChatViewController" customModule="demo1" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VW7-7u-jQk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="GTd-Qa-hjP">
-                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" id="PBj-fw-Nbs">
-                                        <rect key="frame" x="0.0" y="24.5" width="414" height="43.5"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="PBj-fw-Nbs" id="daT-e6-DAx">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                                <connections>
-                                    <outlet property="dataSource" destination="aKT-eg-ZGb" id="fG3-fE-jZi"/>
-                                    <outlet property="delegate" destination="aKT-eg-ZGb" id="cSw-MB-5Yf"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="5HP-Yy-AZ6"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="5HP-Yy-AZ6" firstAttribute="bottom" secondItem="GTd-Qa-hjP" secondAttribute="bottom" id="JW9-pZ-UwD"/>
-                            <constraint firstItem="GTd-Qa-hjP" firstAttribute="top" secondItem="5HP-Yy-AZ6" secondAttribute="top" id="KYD-c1-5Mc"/>
-                            <constraint firstItem="GTd-Qa-hjP" firstAttribute="leading" secondItem="5HP-Yy-AZ6" secondAttribute="leading" id="Pvl-DC-1Io"/>
-                            <constraint firstItem="5HP-Yy-AZ6" firstAttribute="trailing" secondItem="GTd-Qa-hjP" secondAttribute="trailing" id="u8B-eu-ZGs"/>
-                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="hIy-Pm-2yP"/>
-                    <connections>
-                        <outlet property="tableView" destination="GTd-Qa-hjP" id="YQW-di-IAA"/>
-                    </connections>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="hIy-Pm-2yP"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0B0-NR-5rq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -247,8 +218,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="qz3-U6-DFb">
-                                <rect key="frame" x="0.0" y="270" width="414" height="523"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qz3-U6-DFb">
+                                <rect key="frame" x="0.0" y="270" width="414" height="626"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
@@ -256,13 +227,13 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="KJn-jz-fR2" firstAttribute="trailing" secondItem="qz3-U6-DFb" secondAttribute="trailing" id="3Zm-gc-Wyw"/>
+                            <constraint firstAttribute="bottom" secondItem="qz3-U6-DFb" secondAttribute="bottom" id="56P-Je-PzX"/>
                             <constraint firstItem="vTM-OA-L5e" firstAttribute="top" secondItem="8ie-6T-zyj" secondAttribute="bottom" constant="8" symbolic="YES" id="5VD-dP-aOz"/>
                             <constraint firstItem="qz3-U6-DFb" firstAttribute="leading" secondItem="KJn-jz-fR2" secondAttribute="leading" id="6eZ-Lo-xX3"/>
                             <constraint firstItem="KJn-jz-fR2" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="8ie-6T-zyj" secondAttribute="trailing" constant="241" id="8FH-Fg-5gW"/>
                             <constraint firstItem="vTM-OA-L5e" firstAttribute="leading" secondItem="JFW-mA-3CN" secondAttribute="trailing" constant="11" id="8i6-NT-IX7"/>
                             <constraint firstItem="JFW-mA-3CN" firstAttribute="top" secondItem="KJn-jz-fR2" secondAttribute="top" constant="10" id="JF0-eM-Sw1"/>
                             <constraint firstItem="8ie-6T-zyj" firstAttribute="top" secondItem="KJn-jz-fR2" secondAttribute="top" constant="10" id="Lan-4D-ZB7"/>
-                            <constraint firstItem="KJn-jz-fR2" firstAttribute="bottom" secondItem="qz3-U6-DFb" secondAttribute="bottom" constant="20" id="Qqw-WA-rv1"/>
                             <constraint firstItem="qz3-U6-DFb" firstAttribute="top" secondItem="JFW-mA-3CN" secondAttribute="bottom" constant="20" id="hKh-7O-PpL"/>
                             <constraint firstItem="KJn-jz-fR2" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="vTM-OA-L5e" secondAttribute="trailing" constant="20" id="lwn-NB-v5q"/>
                             <constraint firstItem="8ie-6T-zyj" firstAttribute="leading" secondItem="JFW-mA-3CN" secondAttribute="trailing" constant="11" id="nfN-Qy-47p"/>
@@ -620,11 +591,11 @@
             </objects>
             <point key="canvasLocation" x="3486.9565217391305" y="-975"/>
         </scene>
-        <!--Profile-->
+        <!--Chat-->
         <scene sceneID="Ira-bv-wDh">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="KH3-QO-hx2" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" id="65T-JY-Jl8"/>
+                    <tabBarItem key="tabBarItem" title="Chat" id="65T-JY-Jl8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="aXa-hR-vgU">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>

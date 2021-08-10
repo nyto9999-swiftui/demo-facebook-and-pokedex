@@ -14,6 +14,7 @@ struct Post {
     let owner: String
     let txt: String
     var image: [UIImage]?
+    var imageCount: Int?
     
     
     var safePost: String {
