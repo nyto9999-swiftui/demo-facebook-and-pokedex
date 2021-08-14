@@ -25,7 +25,7 @@ class CommentViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let postID = UserDefaults.standard.string(forKey: "postID")
+//        let postID = UserDefaults.standard.string(forKey: "postID")
     }
     public func setup(){
         comment.addTarget(self, action: #selector(didTapEnter), for: UIControl.Event.primaryActionTriggered)
@@ -70,7 +70,7 @@ class CommentViewController: UIViewController {
                 self?.CommentFeed.sort { $0.createdAt > $1.createdAt}
                 self?.tableview.reloadData()
             case .failure(let error):
-                print("\(error)" ?? "failed to get comments")
+                print("\(error)")
                 self?.CommentFeed = []
             }
         })

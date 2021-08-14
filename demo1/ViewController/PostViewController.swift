@@ -16,13 +16,16 @@ class PostViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var profileImageView: UIImageView!
-    
+    var segueImage:UIImage?
     let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let image = segueImage {
+            self.profileImageView.image = image
+        }
         setup()
         collectionSetup()
     }
@@ -30,7 +33,7 @@ class PostViewController: UIViewController {
     private func setup(){
         let name = UserDefaults.standard.string(forKey: "name")
         nameLabel.text = name
-        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
+//        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
         
     }
     
@@ -52,6 +55,7 @@ class PostViewController: UIViewController {
         
         textView.text = ""
         images = [UIImage]()
+        self.dismiss(animated: true)
         
         
     }

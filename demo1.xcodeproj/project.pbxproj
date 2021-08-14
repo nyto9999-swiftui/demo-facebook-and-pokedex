@@ -14,6 +14,7 @@
 		8D0E784526B5B0E400004F35 /* Hi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784426B5B0E400004F35 /* Hi.swift */; };
 		8D0E784A26B5BC3D00004F35 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784926B5BC3D00004F35 /* Post.swift */; };
 		8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784B26B5BC4900004F35 /* AppUser.swift */; };
+		8D15C72326C47AAA00219BD0 /* RegisterScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */; };
 		8D78A9D626ABFE90006F538D /* BottomSheetController in Frameworks */ = {isa = PBXBuildFile; productRef = 8D78A9D526ABFE90006F538D /* BottomSheetController */; };
 		8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D78A9D726ABFF23006F538D /* PostViewController.swift */; };
 		8D873A6226A9FD8C00C82044 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */; };
@@ -33,6 +34,8 @@
 		8DD2169D26A981E500D00E14 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2169C26A981E500D00E14 /* Assets.xcassets */; };
 		8DD216A026A981E500D00E14 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2169E26A981E500D00E14 /* LaunchScreen.storyboard */; };
 		8DD216AA26A98E1600D00E14 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD216A926A98E1600D00E14 /* LoginViewController.swift */; };
+		8DD2ED4326C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */; };
+		8DD2ED4426C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */; };
 		9471B418E264397A2FC6FEF5 /* Pods_demo1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 799038A1FB43758EE56C927B /* Pods_demo1.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +50,7 @@
 		8D0E784426B5B0E400004F35 /* Hi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hi.swift; sourceTree = "<group>"; };
 		8D0E784926B5BC3D00004F35 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		8D0E784B26B5BC4900004F35 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
+		8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScrollViewController.swift; sourceTree = "<group>"; };
 		8D78A9D726ABFF23006F538D /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D873A6326AA210D00C82044 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +71,8 @@
 		8DD2169F26A981E500D00E14 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8DD216A126A981E500D00E14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8DD216A926A98E1600D00E14 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPostImagesCollectionViewCell.swift; sourceTree = "<group>"; };
+		8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainPostImagesCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +105,8 @@
 				8D0E783D26B3781000004F35 /* MainPostTableViewCell.xib */,
 				8DCD3EED26BD590400D63672 /* CommentTableViewCell.swift */,
 				8DCD3EEE26BD590400D63672 /* CommentTableViewCell.xib */,
+				8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */,
+				8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -169,6 +177,7 @@
 				8DD216A126A981E500D00E14 /* Info.plist */,
 				8D873A6526AA9A8600C82044 /* UI + Extension.swift */,
 				8D0E784426B5B0E400004F35 /* Hi.swift */,
+				8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */,
 			);
 			path = demo1;
 			sourceTree = "<group>";
@@ -252,6 +261,7 @@
 				8DD2169D26A981E500D00E14 /* Assets.xcassets in Resources */,
 				8DD2169B26A981E500D00E14 /* Main.storyboard in Resources */,
 				8DCD3EF026BD590400D63672 /* CommentTableViewCell.xib in Resources */,
+				8DD2ED4426C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib in Resources */,
 				8D0E783F26B3781000004F35 /* MainPostTableViewCell.xib in Resources */,
 				8D0E779E26AC983D00004F35 /* PostCollectionViewCell.xib in Resources */,
 			);
@@ -306,6 +316,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D15C72326C47AAA00219BD0 /* RegisterScrollViewController.swift in Sources */,
 				8D873A6826AA9AEE00C82044 /* DatabaseManager.swift in Sources */,
 				8DD2169826A981E500D00E14 /* MainViewController.swift in Sources */,
 				8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */,
@@ -314,6 +325,7 @@
 				8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */,
 				8DCD3EEF26BD590400D63672 /* CommentTableViewCell.swift in Sources */,
 				8DCD3EF226BD61A900D63672 /* Comment.swift in Sources */,
+				8DD2ED4326C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift in Sources */,
 				8DD2169426A981E500D00E14 /* AppDelegate.swift in Sources */,
 				8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */,
 				8DCD3EEC26BD583100D63672 /* CommentViewController.swift in Sources */,

@@ -22,6 +22,8 @@ class LoginViewController: UIViewController {
     private func setup(){
         emailTextfield.textfieldImage(imageName: "envelope")
         passwordTextfield.textfieldImage(imageName: "key")
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
 
     
@@ -145,7 +147,9 @@ extension LoginViewController: LoginButtonDelegate {
         // no operation
     }
 }
-extension UITextField {
+
+
+extension  UITextField {
     func textfieldImage(imageName:String) {
         let padding = 10
         let size = 25
@@ -155,5 +159,11 @@ extension UITextField {
         outerView.addSubview(iconView)
         leftView = outerView
         leftViewMode = .always
+    }
+}
+
+extension LoginViewController {
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
 }

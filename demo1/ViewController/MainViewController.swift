@@ -14,20 +14,38 @@ class MainViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var userInforArea: UIView!
     var postsFeed:[Post] = []
     var test:[Comment] = []
     var array:[String] = []
     let refreshControl = UIRefreshControl()
-    let safeEmail = DatabaseManager.shared.getSafeString()
+    
     let zoomImageview = UIView()
     let startingFrame = CGRect(x: 50,y: 50,width: 200,height: 100)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        
         validateAuth()
         setup()
         getAllPosts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    @IBAction func createPost(_ sender: Any) {
+        performSegue(withIdentifier: "createPost", sender: nil)
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "createPost" {
+            print("yes")
+            let destination = segue.destination as! PostViewController
+            destination.segueImage = self.profileImageView.image
+        }
     }
     
     //if not  users, back to login vc
@@ -41,7 +59,7 @@ class MainViewController: UIViewController {
     
     private func setup() {
         nameLabel.text = UserDefaults.standard.string(forKey: "name")
-        
+        let safeEmail = DatabaseManager.shared.getSafeString()
         //download profile img from db
         StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
         
@@ -59,6 +77,7 @@ class MainViewController: UIViewController {
         tableView.addSubview(refreshControl)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.backgroundColor = .systemGray2
         getAllPosts()
         
     }
@@ -91,24 +110,43 @@ class MainViewController: UIViewController {
    
     }
 }
+let cellSpacingHeight: CGFloat = 5
 
+//MARK:Talbeview
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return cellSpacingHeight
+    }
+    func numberOfSections(in tableView: UITableView) -> Int {
         return self.postsFeed.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = UIColor.clear
+        return headerView
+    }
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
-        cell.postImageView.isUserInteractionEnabled = true
-        cell.configure(with: postsFeed[indexPath.row])
+//        cell.postImageView.isUserInteractionEnabled = true
+        cell.configure(with: postsFeed[indexPath.section])
+        
+        //add border and color
+        cell.backgroundColor = UIColor.white
         
         //comment button
-        cell.commentButton.tag = indexPath.row
+        cell.commentButton.tag = indexPath.section
         cell.commentButton.addTarget(self, action: #selector(goComment), for: UIControl.Event.touchUpInside)
         
     
         //delete button
-        cell.deleteButton.tag = indexPath.row
+        cell.deleteButton.tag = indexPath.section
         cell.deleteButton.addTarget(self, action: #selector(goDelete), for: UIControl.Event.touchUpInside)
 
         return cell
@@ -123,8 +161,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     @objc func goComment(sender: UIButton) {
+        let safeEmail = DatabaseManager.shared.getSafeString()
         UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
-        print(sender.tag)
+        print("jfdklasjf\(sender.tag)")
         UserDefaults.standard.setValue("profile/\(safeEmail)_profile_picture.png", forKey: "senderIcon")
         print(postsFeed[sender.tag].postID)
         
@@ -168,27 +207,8 @@ extension MainViewController:UIScrollViewDelegate{
     }
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.panGestureRecognizer.translation(in: scrollView).y < 0{
-            //scrolling down
-            changeTabBar(hidden: true, animated: true)
-        }
-        else{
-            //scrolling up
-            changeTabBar(hidden: false, animated: true)
-        }
-    }
 
-    func changeTabBar(hidden:Bool, animated: Bool){
-        let tabBar = self.tabBarController?.tabBar
-        let offset = (hidden ? UIScreen.main.bounds.size.height : UIScreen.main.bounds.size.height - (tabBar?.frame.size.height)! )
-        if offset == tabBar?.frame.origin.y {return}
-        print("changing origin y position")
-        let duration:TimeInterval = (animated ? 0.5 : 0.0)
-        UIView.animate(withDuration: duration,
-                       animations: {tabBar!.frame.origin.y = offset},
-                       completion:nil)
-    }
+    
 }
 
 

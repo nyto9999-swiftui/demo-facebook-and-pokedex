@@ -8,6 +8,7 @@
 import UIKit
 
 class MainPostTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
@@ -15,14 +16,25 @@ class MainPostTableViewCell: UITableViewCell {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var postownerLable: UILabel!
     @IBOutlet weak var postImageView: UIImageView!
-    var currentImage:Int = 1
+    @IBOutlet weak var collectionview: UICollectionView!
+    @IBOutlet weak var pageControl: UIPageControl!
     var postFeed: Post?
     let user = UserDefaults.standard.string(forKey: "name")
     let postID = UserDefaults.standard.string(forKey: "postID")
     static let identifier = "MainPostTableViewCell"
+    static func nib() -> UINib {
+        return UINib(nibName: "MainPostTableViewCell", bundle: nil)
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        setupColleciton()
+    }
+    
+    private func setupColleciton(){
+        collectionview.register(MainPostImagesCollectionViewCell.nib(), forCellWithReuseIdentifier: MainPostImagesCollectionViewCell.identifier)
+        collectionview.delegate = self
+        collectionview.dataSource = self
     }
     
     @IBAction func didTapLike(_ sender: Any) {
@@ -40,9 +52,7 @@ class MainPostTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
-    static func nib() -> UINib {
-        return UINib(nibName: "MainPostTableViewCell", bundle: nil)
-    }
+    
     public func configure(with model: Post) {
         UserDefaults.standard.setValue(model.postID, forKey: "postID")
 
@@ -54,30 +64,12 @@ class MainPostTableViewCell: UITableViewCell {
         if let path = postFeed?.profileImage {
             StorageManager.shared.getUIImageForCell(path: "profile/\(path)", imgview: self.profileImageView)
         }
-        
-        //Get first imageview
-        if let pID = postFeed?.postID, let Extension = postFeed?.postPictureName {
-            StorageManager.shared.getUIImageForCell(path: "\(pID)/\(Extension)_1.png", imgview: self.postImageView)
-        }
-        
+
         // delete button
         SetDeleteButtonForPostOwner()
         
         // like button
         likeButtonState()
-        
-        //swipe right
-        postImageView.isUserInteractionEnabled = true
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(self.swipe(gesture:)))
-        swipeRight.direction = .right
-        self.postImageView.addGestureRecognizer(swipeRight)
-        
-        //swipe left
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(self.swipe(gesture:)))
-        swipeLeft.direction = .left
-        self.postImageView.addGestureRecognizer(swipeLeft)
-        
-        
     }
 }
 
@@ -98,7 +90,6 @@ extension MainPostTableViewCell {
         }
     }
     
-    
     private func SetDeleteButtonForPostOwner(){
         if postFeed?.owner != user! {
             self.deleteButton.setImage(UIImage(systemName: ""), for: .normal)
@@ -107,6 +98,7 @@ extension MainPostTableViewCell {
             self.deleteButton.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
         }
     }
+    
     private func likeButtonState(){
         DatabaseManager.shared.checkLike(for: postFeed!.postID, clicker: user!) { click in
             if click {
@@ -119,64 +111,33 @@ extension MainPostTableViewCell {
     }
 }
 
-//MARK: Animation/PostImageView
-extension MainPostTableViewCell {
-    
-    //UIGestureRecognizer
-    @objc func swipe(gesture: UIGestureRecognizer?) -> Void {
-        if (postFeed?.imageCount) == nil {
-            print("no images")
-            return
-        }
-        if let swipegesture = gesture as? UISwipeGestureRecognizer {
-            
-            switch swipegesture.direction {
-            case UISwipeGestureRecognizer.Direction.left:
-                
-                if currentImage == (postFeed?.imageCount)! { currentImage = 1}
-                else { currentImage += 1}
-                
-                getPostImage()
-                animateRotate(to: "left")
-
-            case UISwipeGestureRecognizer.Direction.right:
-                if currentImage == 1 { currentImage = (postFeed?.imageCount)! }
-                else { currentImage -= 1}
-        
-                getPostImage()
-                animateRotate(to: "right")
-            default:
-                break
-            }
-        }
+//MARK: collection view for post images
+extension MainPostTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let count = (postFeed?.imageCount)!
+            pageControl.numberOfPages = count
+        pageControl.isHidden = !(count>1)
+        return count
     }
     
-    //download image from firebase
-    private func getPostImage(){
-        if let pID = postFeed?.postID, let Extension = postFeed?.postPictureName {
-            StorageManager.shared.getUIImageForCell(path: "\(pID)/\(Extension)_\(currentImage).png", imgview: self.postImageView)
-        }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionview.dequeueReusableCell(withReuseIdentifier: MainPostImagesCollectionViewCell.identifier, for: indexPath) as! MainPostImagesCollectionViewCell
+        cell.configure(with: postFeed!, indexrow: indexPath.row)
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionview.width, height: 250)
     }
     
-    //post imageview animation
-    private func animateRotate(to: String){
-        if to == "right" {
-            UIView.animate(withDuration: 0.1, animations: {
-                self.postImageView.transform = CGAffineTransform(rotationAngle: .pi/25)
-                    }){ _ in
-                UIView.animate(withDuration: 0.25) {
-                    self.postImageView.transform = CGAffineTransform.identity
-                }
-            }
-        }
-        else{ // left
-            UIView.animate(withDuration: 0.1, animations: {
-                self.postImageView.transform = CGAffineTransform(rotationAngle: -.pi/25)
-                    }){ _ in
-                UIView.animate(withDuration: 0.25) {
-                    self.postImageView.transform = CGAffineTransform.identity
-                }
-            }
-        }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        pageControl?.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
+    }
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        pageControl?.currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
     }
 }
+ 

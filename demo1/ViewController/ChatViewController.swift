@@ -8,7 +8,7 @@
 import UIKit
 
 class ChatViewController: UIViewController {
-    
+    var txt = ""
     lazy var searchBar:UISearchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: view.width, height: 20))
     
     override func viewDidLoad() {
@@ -20,10 +20,22 @@ class ChatViewController: UIViewController {
         let leftNavBarButton = UIBarButtonItem(customView: searchBar)
         self.navigationItem.leftBarButtonItem = leftNavBarButton
         searchBar.delegate = self
+        
     }
 
 }
 extension ChatViewController: UISearchBarDelegate  {
     
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        NSObject.cancelPreviousPerformRequests(withTarget: self)
+        self.perform(#selector(test), with: searchText, afterDelay: 0.5)
+        txt = searchText
+    }
+    
+    @objc func test(){
+        print("\(txt)")
+        view.backgroundColor = .red
+    }
     
 }
