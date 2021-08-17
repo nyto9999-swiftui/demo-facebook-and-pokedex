@@ -40,9 +40,8 @@ class CommentTableViewCell: UITableViewCell {
         //time difference
         let time = CommentFeed?.createdAt
         let difference = dateformatter(date: Double(time!)!)
-        if difference != nil {
-            self.createdAt.text = difference
-        }
+        
+        self.createdAt.text = difference
         
         //Icon image
         if let senderIconString = CommentFeed?.senderIcon {

@@ -74,7 +74,7 @@ class RegisterViewController: UIViewController {
                 UserDefaults.standard.setValue(email, forKey: "email")
                 UserDefaults.standard.setValue("\(firstname)\(lastname)", forKey: "name")
                 // inser user data to db
-                let appUser = AppUser(firstName: firstname, lastName: lastname, emailAddress: email)
+                let appUser = AppUser(name: firstname+lastname, emailAddress: email)
                 DatabaseManager.shared.insertUser(with: appUser, completion: { success in
                     if success {
                         

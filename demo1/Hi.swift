@@ -16,4 +16,13 @@ class Hi {
         case failedToGetData
         case observeSingleEvent
     }
+    
+    public static let dataFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .long
+        formatter.locale = .current
+        return formatter
+    }()
 }
+

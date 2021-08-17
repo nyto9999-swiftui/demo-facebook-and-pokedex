@@ -36,6 +36,12 @@
 		8DD216AA26A98E1600D00E14 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD216A926A98E1600D00E14 /* LoginViewController.swift */; };
 		8DD2ED4326C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */; };
 		8DD2ED4426C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */; };
+		8DD2ED4726C82D0100A106D0 /* ChatSearchUserTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4526C82D0100A106D0 /* ChatSearchUserTableViewCell.swift */; };
+		8DD2ED4826C82D0100A106D0 /* ChatSearchUserTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4626C82D0100A106D0 /* ChatSearchUserTableViewCell.xib */; };
+		8DD2ED4C26C874A500A106D0 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4B26C874A500A106D0 /* Message.swift */; };
+		8DD2ED4E26C88DD300A106D0 /* MSGViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED4D26C88DD300A106D0 /* MSGViewController.swift */; };
+		8DD2ED5326CB429B00A106D0 /* ChatTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DD2ED5126CB429B00A106D0 /* ChatTableViewCell.swift */; };
+		8DD2ED5426CB429B00A106D0 /* ChatTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8DD2ED5226CB429B00A106D0 /* ChatTableViewCell.xib */; };
 		9471B418E264397A2FC6FEF5 /* Pods_demo1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 799038A1FB43758EE56C927B /* Pods_demo1.framework */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +79,12 @@
 		8DD216A926A98E1600D00E14 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPostImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainPostImagesCollectionViewCell.xib; sourceTree = "<group>"; };
+		8DD2ED4526C82D0100A106D0 /* ChatSearchUserTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatSearchUserTableViewCell.swift; sourceTree = "<group>"; };
+		8DD2ED4626C82D0100A106D0 /* ChatSearchUserTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatSearchUserTableViewCell.xib; sourceTree = "<group>"; };
+		8DD2ED4B26C874A500A106D0 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		8DD2ED4D26C88DD300A106D0 /* MSGViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSGViewController.swift; sourceTree = "<group>"; };
+		8DD2ED5126CB429B00A106D0 /* ChatTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableViewCell.swift; sourceTree = "<group>"; };
+		8DD2ED5226CB429B00A106D0 /* ChatTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatTableViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +119,10 @@
 				8DCD3EEE26BD590400D63672 /* CommentTableViewCell.xib */,
 				8DD2ED4126C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.swift */,
 				8DD2ED4226C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib */,
+				8DD2ED4526C82D0100A106D0 /* ChatSearchUserTableViewCell.swift */,
+				8DD2ED4626C82D0100A106D0 /* ChatSearchUserTableViewCell.xib */,
+				8DD2ED5126CB429B00A106D0 /* ChatTableViewCell.swift */,
+				8DD2ED5226CB429B00A106D0 /* ChatTableViewCell.xib */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -117,6 +133,7 @@
 				8D0E784926B5BC3D00004F35 /* Post.swift */,
 				8D0E784B26B5BC4900004F35 /* AppUser.swift */,
 				8DCD3EF126BD61A900D63672 /* Comment.swift */,
+				8DD2ED4B26C874A500A106D0 /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -130,6 +147,7 @@
 				8DD2169726A981E500D00E14 /* MainViewController.swift */,
 				8DCD3EEB26BD583100D63672 /* CommentViewController.swift */,
 				8DCD3EF526C2BF3E00D63672 /* ChatViewController.swift */,
+				8DD2ED4D26C88DD300A106D0 /* MSGViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -261,7 +279,9 @@
 				8DD2169D26A981E500D00E14 /* Assets.xcassets in Resources */,
 				8DD2169B26A981E500D00E14 /* Main.storyboard in Resources */,
 				8DCD3EF026BD590400D63672 /* CommentTableViewCell.xib in Resources */,
+				8DD2ED4826C82D0100A106D0 /* ChatSearchUserTableViewCell.xib in Resources */,
 				8DD2ED4426C7C4EB00A106D0 /* MainPostImagesCollectionViewCell.xib in Resources */,
+				8DD2ED5426CB429B00A106D0 /* ChatTableViewCell.xib in Resources */,
 				8D0E783F26B3781000004F35 /* MainPostTableViewCell.xib in Resources */,
 				8D0E779E26AC983D00004F35 /* PostCollectionViewCell.xib in Resources */,
 			);
@@ -330,10 +350,14 @@
 				8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */,
 				8DCD3EEC26BD583100D63672 /* CommentViewController.swift in Sources */,
 				8DCD3EF626C2BF3E00D63672 /* ChatViewController.swift in Sources */,
+				8DD2ED4726C82D0100A106D0 /* ChatSearchUserTableViewCell.swift in Sources */,
 				8D0E784A26B5BC3D00004F35 /* Post.swift in Sources */,
+				8DD2ED4E26C88DD300A106D0 /* MSGViewController.swift in Sources */,
 				8D0E784526B5B0E400004F35 /* Hi.swift in Sources */,
+				8DD2ED4C26C874A500A106D0 /* Message.swift in Sources */,
 				8D0E779D26AC983D00004F35 /* PostCollectionViewCell.swift in Sources */,
 				8D873A6426AA210D00C82044 /* RegisterViewController.swift in Sources */,
+				8DD2ED5326CB429B00A106D0 /* ChatTableViewCell.swift in Sources */,
 				8DD216AA26A98E1600D00E14 /* LoginViewController.swift in Sources */,
 				8DD2169626A981E500D00E14 /* SceneDelegate.swift in Sources */,
 			);

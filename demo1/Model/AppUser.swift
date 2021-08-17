@@ -6,8 +6,8 @@
 //
 import UIKit
 struct AppUser {
-    let firstName: String
-    let lastName: String
+   
+    let name: String
     let emailAddress: String
     var safeEmail: String {
         var safeEmail = emailAddress.replacingOccurrences(of: ".", with: "-")

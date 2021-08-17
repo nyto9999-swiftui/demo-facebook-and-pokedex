@@ -29,6 +29,7 @@ class MainPostTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         setupColleciton()
+        
     }
     
     private func setupColleciton(){
@@ -55,7 +56,7 @@ class MainPostTableViewCell: UITableViewCell {
     
     public func configure(with model: Post) {
         UserDefaults.standard.setValue(model.postID, forKey: "postID")
-
+        self.collectionview.reloadData()
         self.postFeed = model
         self.textview.text = postFeed?.txt
         self.postownerLable.text = postFeed?.owner
@@ -64,7 +65,7 @@ class MainPostTableViewCell: UITableViewCell {
         if let path = postFeed?.profileImage {
             StorageManager.shared.getUIImageForCell(path: "profile/\(path)", imgview: self.profileImageView)
         }
-
+        
         // delete button
         SetDeleteButtonForPostOwner()
         

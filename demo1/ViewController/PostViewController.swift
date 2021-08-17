@@ -53,11 +53,32 @@ class PostViewController: UIViewController {
             guard success == true else { print("failed to insert post"); return}
         })
         
+        var arrayData = [Data]()
+        //upload image to storage
+        for img in images {
+            guard let data = img.pngData() else {
+                print("png error")
+                return
+            }
+            print("send post to db")
+            arrayData.append(data)
+        }
+        
+        let filename = post.postPictureName
+        StorageManager.shared.uploadPictures(with: arrayData, path:post.safePost, fileName: filename, completion: { result in
+            switch result {
+            case .success(let url):
+                print(url)
+                sleep(5)
+                self.dismiss(animated: true)
+            case .failure(let error):
+                print(error)
+            }
+        })
+        
+        arrayData = []
         textView.text = ""
         images = [UIImage]()
-        self.dismiss(animated: true)
-        
-        
     }
 
     func collectionSetup() -> Void{

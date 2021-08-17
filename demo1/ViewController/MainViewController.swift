@@ -33,7 +33,8 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+//        navigationController?.setNavigationBarHidden(true, animated: animated)
+        tableView.reloadData()
     }
     @IBAction func createPost(_ sender: Any) {
         performSegue(withIdentifier: "createPost", sender: nil)
@@ -89,6 +90,8 @@ class MainViewController: UIViewController {
         tableView.reloadData()
     }
     
+    
+    
     private func getAllPosts() {
         DatabaseManager.shared.getAllPosts( completion: {[weak self] gotPosts in
             switch gotPosts {
@@ -107,7 +110,14 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func test(_ sender: Any) {
-   
+        DatabaseManager.shared.getAllMessages(with: "123-gmail-com_nyto4826-yahoo-com-tw") { Result in
+            switch Result {
+            case .success(let messages):
+                print("f")
+            case .failure(let error):
+                print("err")
+            }
+        }
     }
 }
 let cellSpacingHeight: CGFloat = 5
@@ -118,6 +128,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         return cellSpacingHeight
     }
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return self.postsFeed.count
     }
     
@@ -148,7 +159,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         //delete button
         cell.deleteButton.tag = indexPath.section
         cell.deleteButton.addTarget(self, action: #selector(goDelete), for: UIControl.Event.touchUpInside)
-
         return cell
     }
     
