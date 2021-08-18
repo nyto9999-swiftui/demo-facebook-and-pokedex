@@ -110,14 +110,16 @@ class MainViewController: UIViewController {
     }
     
     @IBAction func test(_ sender: Any) {
-        DatabaseManager.shared.getAllMessages(with: "123-gmail-com_nyto4826-yahoo-com-tw") { Result in
-            switch Result {
-            case .success(let messages):
-                print("f")
-            case .failure(let error):
-                print("err")
+        DatabaseManager.shared.getAllConversations(for: "nyto4826-yahoo-com-tw", completion: { result in
+            switch result {
+            case .success(let conversations):
+                
+            print(conversations.count)
+            case .failure(_):
+                print("error")
             }
-        }
+            
+        })
     }
 }
 let cellSpacingHeight: CGFloat = 5

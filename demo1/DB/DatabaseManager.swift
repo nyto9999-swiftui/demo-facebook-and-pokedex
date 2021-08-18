@@ -284,18 +284,60 @@ final class DatabaseManager{
             "is_read": false,
         ]
         
+        //
         database.child("conversation/\(conversationID)/\(message.messageId)").setValue(MessageEntry) { (error:Error?, ref:DatabaseReference) in
             if let error = error {
                 print("Failed to send message: \(error)")
                 completion(false)
             }
-            else{
-                print("message send")
-                completion(true)
+        }
+        
+        // latest msg for sender's chat vc cell
+        database.child("users/\(message.sender.senderId)/latestMessage/\(conversationID)").setValue(MessageEntry) { error, _ in
+            if let error = error {
+                print("Failed to send message: \(error)")
+                completion(false)
             }
-            
+        }
+        
+        // latest msg for recevier's chat vc cell
+        database.child("users/\(receiver)/latestMessage/\(conversationID)").setValue(MessageEntry) { error, _ in
+            if let error = error {
+                print("Failed to send message: \(error)")
+                completion(false)
+            }
         }
     }
+    
+    public func getAllConversations(for user: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
+        var conversations = [Conversation]()
+        database.child("users/\(user)/latestMessage").observe(.value, with: { snapshot in
+            for eachMessage in snapshot.children {
+                guard let eachMessage = eachMessage as? DataSnapshot else {
+                    completion(.failure(Hi.DatabaseError.failedToGetData))
+                    return
+                }
+                guard let dict = eachMessage.value as? [String:Any] else {
+                    completion(.failure(Hi.DatabaseError.failedToGetData))
+                    return
+                }
+                
+                guard let senderName = dict["senderName"] as? String,
+                      let sender = dict["senderId"] as? String,
+                      let receiver = dict["receiverId"] as? String,
+                      let content = dict["content"] as? String,
+                      let date = dict["date"] as? String,
+                      let isRead = dict["is_read"] as? Bool else {
+                    completion(.failure(Hi.DatabaseError.failedToGetData))
+                    return
+                }
+                let lastestMessage = LatestMessage(date: date, text: content, isRead: isRead)
+                conversations.append(Conversation(id: eachMessage.key, name: senderName, otherUserEmail: receiver, latestMessage: lastestMessage))
+            }
+            completion(.success(conversations))
+        })
+    }
+    
     
     public func getAllMessages(with conversationId: String, completion: @escaping (Result<[Message],Error>) -> Void){
         database.child("conversation/\(conversationId)").observe(.value) { DataSnapshot in

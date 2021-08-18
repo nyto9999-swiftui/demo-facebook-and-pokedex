@@ -43,9 +43,12 @@ class MSGViewController: MessagesViewController {
         super.viewDidAppear(animated)
         
         messageInputBar.inputTextView.becomeFirstResponder()
-        if let conversationId = createConversationId {
-            
-            listenForMessages(for: conversationId, shouldScrollToBottom: true)
+       
+        if self.conversationId == nil {
+            listenForMessages(for: createConversationId!, shouldScrollToBottom: true)
+        }
+        else {
+            listenForMessages(for: self.conversationId!, shouldScrollToBottom: true)
         }
     }
     
