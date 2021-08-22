@@ -14,23 +14,10 @@ class CommentTableViewCell: UITableViewCell {
     @IBOutlet weak var txt: UILabel!
     @IBOutlet weak var createdAt: UILabel!
     
-    static let identifier = "CommentTableViewCell"
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
-    static func nib() -> UINib {
-        return UINib(nibName: "CommentTableViewCell", bundle: nil)
-    }
-    
     func configure(with model: Comment){
         self.CommentFeed = model
         //MARK: fix time difference
@@ -49,6 +36,12 @@ class CommentTableViewCell: UITableViewCell {
         }
     }
     
+    static let identifier = "CommentTableViewCell"
+    static func nib() -> UINib {
+        return UINib(nibName: "CommentTableViewCell", bundle: nil)
+    }
+}
+extension CommentTableViewCell {
     func dateformatter(date: Double) -> String {
 
         let date1:Date = Date() // Same you did before with timeNow variable

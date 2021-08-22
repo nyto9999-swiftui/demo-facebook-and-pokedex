@@ -8,17 +8,24 @@
 import Foundation
 import FirebaseDatabase
 import MessageKit
+
 final class DatabaseManager{
     static let shared = DatabaseManager()
     private let database = Database.database().reference()
     
+    /*Firebase 不接受 '. @ # 等符號*/
     static func safeString(for firebaseUpload : String) -> String {
         var safeEmail = firebaseUpload.replacingOccurrences(of: ".", with: "-")
         safeEmail = safeEmail.replacingOccurrences(of: "@", with: "-")
         return safeEmail
     }
     
-    //insert user
+    
+    /// 第一次使用此App需要用戶的資料
+    /// Caller: RegisterViewController
+    /// - Parameters:
+    ///   - user: AppUser的屬性 -> 用戶姓名, 郵箱作為id使用
+    ///   - completion: True -> 用戶姓名, id 成功上傳至Firebase, False -> 上傳失敗
     public func insertUser(with user: AppUser, completion: @escaping (Bool) -> Void){
         
         self.database.child("users/\(user.safeEmail)/username").setValue(user.name)
@@ -37,7 +44,11 @@ final class DatabaseManager{
         })
     }
     
-    //insert post
+    /// 上傳使用者貼文
+    /// Caller: PostViewController
+    /// - Parameters:
+    ///   - post: Post屬性： owner, txt, postId = String(Email + Date), profileImg = String(Email + _profile_picture.png), imageCount
+    ///   - completion: True -> 上傳至 postwall, False -> 上傳失敗
     public func insertPost(with post: Post, completion: @escaping ((Bool) -> Void)){
         let newPost: [String: Any] = [
             "owner":post.owner,
@@ -55,7 +66,9 @@ final class DatabaseManager{
         }
     }
     
-    //get all posts
+    /// 獲取Postwall 底下的所有貼文
+    /// Caller: Main VC Tableview
+    /// - Parameter completion: True -> 回傳[Post]給Main VC Tableview ,  False -> Error
     public func getAllPosts(completion: @escaping (Result<[Post], Error>) -> Void) {
         database.child("postwall").observe(.value, with: { snapshot in
             var Feed:[Post] = []
@@ -79,28 +92,35 @@ final class DatabaseManager{
         
     }
     
-    //delete post
-    public func deletePost(for path: String){
-        self.database.child("postwall/\(path)").removeValue() { err,_  in
+    /// 使用者刪除自己特定的貼文
+    /// Caller: Main VC TableviewCell 的 Delete 按鈕
+    /// - Parameter postId: AppUser.Email + date()
+    public func deletePost(for postId: String){
+        self.database.child("postwall/\(postId)").removeValue() { err,_  in
             if err != nil {
                 print(err ?? "Failed to delete post")
             }
         }
-        self.database.child("comments/\(path)").removeValue() { err,_ in
+        self.database.child("comments/\(postId)").removeValue() { err,_ in
             if err != nil {
                 print(err ?? "Failed to delete comment")
             }
         }
     }
     
-    //insert like
-    public func insertLike(path: String, clicker: String, completion: @escaping ((Bool) -> Void)) {
-        database.child("postwall/\(path)/like").observeSingleEvent(of: .value, with: { snapshot in
+    /// 使用者點擊Main VC TableviewCell 的 Like 按鈕
+    /// Caller: Main VC TableviewCell 的 Like 按鈕
+    /// - Parameters:
+    ///   - postId: AppUser.Email + date(), e.g. "nyto4826-yahoo-com-tw_1628960831-5357928"
+    ///   - clicker: UserDefault.stand.string(forKey: "name")
+    ///   - completion: True -> 上傳 [ "clicker" , "clicker] 至 postId/like, Fales -> Error
+    public func insertLike(postId: String, clicker: String, completion: @escaping ((Bool) -> Void)) {
+        database.child("postwall/\(postId)/like").observeSingleEvent(of: .value, with: { snapshot in
             let newLike:[String:String] = ["\(clicker)":"\(clicker)"]
             
             guard var like = snapshot.value as? [String:String] else {
                 //empty
-                self.database.child("postwall/\(path)/like").setValue(newLike) { err, _ in
+                self.database.child("postwall/\(postId)/like").setValue(newLike) { err, _ in
                     guard err == nil else {
                         completion(false)
                         return
@@ -112,7 +132,7 @@ final class DatabaseManager{
             }
             // append element to like
             like["\(clicker)"] = "\(clicker)"
-            self.database.child("postwall/\(path)/like").setValue(newLike) { err, _ in
+            self.database.child("postwall/\(postId)/like").setValue(newLike) { err, _ in
                 guard err == nil else {
                     completion(false)
                     return
@@ -122,18 +142,27 @@ final class DatabaseManager{
         })
     }
     
-    // delete like
-    public func delLike(path: String, clicker: String) {
-        database.child("postwall/\(path)/like/\(clicker)").removeValue { err,_  in
+    /// 使用者取消自已按過喜歡的貼文
+    /// Caller: Main VC TableviewCell 的 Like 按鈕
+    /// - Parameters:
+    ///   - postId: AppUser.Email + date(),    e.g. "nyto4826-yahoo-com-tw_1628960831-5357928"
+    ///   - clicker: UserDefault.stand.string(forKey: "name")    e.g. TonyChen
+    public func delLike(postId: String, clicker: String) {
+        database.child("postwall/\(postId)/like/\(clicker)").removeValue { err,_  in
             if err != nil {
                 print(err ?? "Failed to delete like")
             }
         }
     }
     
-    //check like
-    public func checkLike(for post: String, clicker:String, completion: @escaping ((Bool) -> Void)) {
-        database.child("postwall/\(post)/like").observe(.value, with: {snapshot in
+    /// 使用者是否已按過Post的Like按鈕
+    /// Caller: MainPostTableViewCell.Configure()
+    /// - Parameters:
+    ///   - postId: AppUser.Email + date(),    e.g. "nyto4826-yahoo-com-tw_1628960831-5357928"
+    ///   - clicker: UserDefault.stand.string(forKey: "name")    e.g. TonyChen
+    ///   - completion: True -> Like按鈕已按過, False -> Like按鈕沒按過
+    public func isLike(for postId: String, clicker:String, completion: @escaping ((Bool) -> Void)) {
+        database.child("postwall/\(postId)/like").observe(.value, with: {snapshot in
             //empty
             guard let snap = snapshot.value as? [String: String] else {
                 completion(false)
@@ -149,9 +178,13 @@ final class DatabaseManager{
         })
     }
     
-    //insert comment
-    public func insertComment(for post: String, comment: Comment) {
-        let time = NSDate().timeIntervalSince1970
+    /// 上傳使用者的留言至Firebase
+    /// Caller: MainVC TableviewCell 的 Comment按鈕 -> CommemtVC 的 TextField
+    /// - Parameters:
+    ///   - postId: AppUser.Email + date(),    e.g. "nyto4826-yahoo-com-tw_1628960831-5357928"
+    ///   - comment: UUID()
+    public func insertComment(for postId: String, comment: Comment) {
+        let time = Date().timeIntervalSince1970
         
         let newComment: [String: Any] = [
             "owner":comment.sender,
@@ -159,12 +192,16 @@ final class DatabaseManager{
             "senderIcon":comment.senderIcon,
             "createdAt":String(time)
         ]
-        self.database.child("comments/\(post)/\(comment.commentID)").setValue(newComment)
+        self.database.child("comments/\(postId)/\(comment.commentID)").setValue(newComment)
     }
     
-    // get all comments
-    public func getAllComments(for path: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
-        database.child("comments/\(path)").observe(.value, with: { post in
+    /// 從Firebase獲取指定的貼文裡的所有留言
+    /// Caller: CommentVC
+    /// - Parameters:
+    ///   - postId: AppUser.Email + date(),    e.g. "nyto4826-yahoo-com-tw_1628960831-5357928"
+    ///   - completion: 回傳[Comment] 到 ＣommentVC Tableview
+    public func getAllComments(for postId: String, completion: @escaping (Result<[Comment], Error>) -> Void) {
+        database.child("comments/\(postId)").observe(.value, with: { post in
             var comments = [Comment]()
             
             for comment in post.children {
@@ -181,18 +218,16 @@ final class DatabaseManager{
                         print("errrror")
                         return
                     }
-                    comments.append(Comment(commentID: comment.key, postID: path, sender: sender, txt: txt, senderIcon: senderIcon, createdAt: createdAt))
+                    comments.append(Comment(commentID: comment.key, postID: postId, sender: sender, txt: txt, senderIcon: senderIcon, createdAt: createdAt))
                 }
             }
             completion(.success(comments))
         })
     }
     
-    //get all users
-    
-    //usermail {
-    //[username: name]
-    //}
+    /// 從Firebase獲取Users的屬性
+    /// Caller: UserSearchVC
+    /// - Parameter completion: True -> 回傳[AppUser]給UearSearchVC, False -> Error
     public func getALlUsers(completion: @escaping (Result<[AppUser], Error>) -> Void) {
         
         var users = [AppUser]()
@@ -201,7 +236,6 @@ final class DatabaseManager{
                 if let user = user as? DataSnapshot {
                     
                     guard let dict = user.value as? [String:Any] else {
-                        print("ffjfjff")
                         return
                     }
                     guard let name = dict["username"] as? String else {
@@ -212,39 +246,20 @@ final class DatabaseManager{
                 }
             }
             completion(.success(users))
-        })
-    }
-    
-    public func tryit(){
-        print("jfk")
-        self.database.child("users/").observe(.value) { DataSnapshot in
-            for user in DataSnapshot.children {
-                if let user = user as? DataSnapshot {
-                    print(user.key)
-                }
-            }
-        }
-    }
-    
-    public func hi() {
-        let like:[String] = ["tony","chen","宇亘陳"]
-        self.database.child("postwall/nyto4826-yahoo-com-tw_1627941263-837333/like").setValue(like)
-        
-        database.child("postwall/nyto4826-yahoo-com-tw_1627944152-029378/like").observe(.value, with: {snapshop in
-            guard let likes = snapshop.value as? [String] else {
-                print("faileddddddd")
-                return
-            }
-            for i in likes {
-                if i == "like" {
-                    print("yes")
-                }
-            }
+            users = []
         })
     }
     
     //MARK: sendMessage
-    public func sendMessage(conversationID: String, receiver: String, senderName: String, message: Message, completion: @escaping (Bool) -> Void) {
+    /// 使用者在MSG VC 輸入訊息
+    /// Caller: CommentVC 的 TextField
+    /// - Parameters:
+    ///   - conversationID: "\(receiverId)_\(currentUser)"
+    ///   - receiverId: Receiver Email
+    ///   - receiverName: receiverName
+    ///   - message: 屬性：sender, messageId, sentDate, kind
+    ///   - completion: True -> 成功上傳comment到 Firebase 並且 上傳到 receiver 和 sender 的 lastMessage底下, False -> False
+    public func sendMessage(conversationID: String, receiverId: String, receiverName: String, message: Message, completion: @escaping (Bool) -> Void) {
         
         let dateString = Hi.dataFormatter.string(from: message.sentDate)
         var content = ""
@@ -275,16 +290,17 @@ final class DatabaseManager{
             break
         }
         let MessageEntry: [String: Any] = [
-            "senderName": senderName,
+            "senderName": message.sender.displayName,
+            "receiverName": receiverName,
             "type": message.kind.messageKindString,
             "content": content,
             "date": dateString,
             "senderId": message.sender.senderId,
-            "receiverId": receiver,
+            "receiverId": receiverId,
             "is_read": false,
         ]
         
-        //
+        //Firebase/Comments
         database.child("conversation/\(conversationID)/\(message.messageId)").setValue(MessageEntry) { (error:Error?, ref:DatabaseReference) in
             if let error = error {
                 print("Failed to send message: \(error)")
@@ -292,7 +308,7 @@ final class DatabaseManager{
             }
         }
         
-        // latest msg for sender's chat vc cell
+        // Firebase/users/sender/latestMessage
         database.child("users/\(message.sender.senderId)/latestMessage/\(conversationID)").setValue(MessageEntry) { error, _ in
             if let error = error {
                 print("Failed to send message: \(error)")
@@ -300,8 +316,8 @@ final class DatabaseManager{
             }
         }
         
-        // latest msg for recevier's chat vc cell
-        database.child("users/\(receiver)/latestMessage/\(conversationID)").setValue(MessageEntry) { error, _ in
+        // Firebase/users/receiver/latestMessage
+        database.child("users/\(receiverId)/latestMessage/\(conversationID)").setValue(MessageEntry) { error, _ in
             if let error = error {
                 print("Failed to send message: \(error)")
                 completion(false)
@@ -309,6 +325,11 @@ final class DatabaseManager{
         }
     }
     
+    /// 獲取 使用者與所有對話過的用戶的最後一次對話
+    /// Caller: ChatVC Tableview
+    /// - Parameters:
+    ///   - user: UserDefault.stand.string(forKey: "email")
+    ///   - completion: True -> 回傳[Conversation], False -> Error
     public func getAllConversations(for user: String, completion: @escaping (Result<[Conversation], Error>) -> Void) {
         var conversations = [Conversation]()
         database.child("users/\(user)/latestMessage").observe(.value, with: { snapshot in
@@ -323,8 +344,8 @@ final class DatabaseManager{
                 }
                 
                 guard let senderName = dict["senderName"] as? String,
-                      let sender = dict["senderId"] as? String,
-                      let receiver = dict["receiverId"] as? String,
+                      let receiverName = dict["receiverName"] as? String,
+                      let receiverId = dict["receiverId"] as? String,
                       let content = dict["content"] as? String,
                       let date = dict["date"] as? String,
                       let isRead = dict["is_read"] as? Bool else {
@@ -332,17 +353,23 @@ final class DatabaseManager{
                     return
                 }
                 let lastestMessage = LatestMessage(date: date, text: content, isRead: isRead)
-                conversations.append(Conversation(id: eachMessage.key, name: senderName, otherUserEmail: receiver, latestMessage: lastestMessage))
+                conversations.append(Conversation(id: eachMessage.key, senderName: senderName, receiverName: receiverName, receiverEmail: receiverId, latestMessage: lastestMessage))
             }
             completion(.success(conversations))
+            conversations = []
         })
     }
     
     
+    /// 獲取使用者與特定用戶的所有對話
+    /// Caller: MSG VC
+    /// - Parameters:
+    ///   - conversationId: "\(receiverId)_\(currentUser)"  e.g. nyto-gmail-com_123-gmail-com
+    ///   - completion: True -> 回傳[Message], False -> Error
     public func getAllMessages(with conversationId: String, completion: @escaping (Result<[Message],Error>) -> Void){
         database.child("conversation/\(conversationId)").observe(.value) { DataSnapshot in
             var messages = [Message]()
-           
+            
             for eachMessage in DataSnapshot.children {
                 if let eachMessage = eachMessage as? DataSnapshot {
                     guard let dict = eachMessage.value as? [String:Any] else {
@@ -380,6 +407,11 @@ final class DatabaseManager{
 }
 
 extension DatabaseManager {
+    /// 防止用戶資料重複登入到Firebase
+    /// Caller: LoginVC(Facebook用戶註冊), RegisterVC
+    /// - Parameters:
+    ///   - email: 使用者的Email 會被作為 userId 使用
+    ///   - completion: True -> 註冊至Firebase成功, False -> False
     public func userExists(with email: String,
                            completion: @escaping ((Bool) -> Void)) {
         
@@ -395,8 +427,14 @@ extension DatabaseManager {
             completion(true)
         })
     }
-    public func getUsername(path: String, completion: @escaping (Result<Any, Error>) -> Void){
-        self.database.child("users/\(path)").observeSingleEvent(of: .value, with: { snapshot in
+    
+    /// 獲取使用者名稱
+    /// Caller: LoginVC
+    /// - Parameters:
+    ///   - userId: = User Email
+    ///   - completion: True -> get username, False -> False
+    public func getUsername(username: String, completion: @escaping (Result<Any, Error>) -> Void){
+        self.database.child("users/\(username)").observeSingleEvent(of: .value, with: { snapshot in
             guard let value = snapshot.value,
                   let userData = value as? [String:Any],
                   let username = userData["username"] as? String else {

@@ -9,37 +9,43 @@ import UIKit
 
 class ChatTableViewCell: UITableViewCell {
     var ConversationFeed:Conversation?
+    let currentUser = UserDefaults.standard.string(forKey: "name")
     @IBOutlet weak var imageview: UIImageView!
     @IBOutlet weak var sender: UILabel!
     @IBOutlet weak var lastestMsg: UILabel!
-    
-    static let identifier = "ChatTableViewCell"
-    
-    static func nib() -> UINib {
-        return UINib(nibName: "ChatTableViewCell", bundle: nil)
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
     
     public func configure(with model: Conversation){
         ConversationFeed = model
-        self.sender.text = ConversationFeed?.name
-        self.lastestMsg.text = ConversationFeed?.latestMessage.text
         
-        if let recevierString = ConversationFeed?.otherUserEmail {
+        //reciver
+        self.sender.text = ConversationFeed?.receiverName
+        
+        //msg
+        if let currentUser = currentUser {
+            if ConversationFeed?.senderName == currentUser {
+                self.lastestMsg.text = "你: \((ConversationFeed?.latestMessage.text)!)"
+            }
+            else {
+                self.lastestMsg.text = ConversationFeed?.latestMessage.text
+            }
+        }
+        
+        //profile icon
+        if let recevierString = ConversationFeed?.receiverEmail {
             let recevierIconString = "profile/\(recevierString)_profile_picture.png"
             StorageManager.shared.getUIImageForCell(path: recevierIconString, imgview: self.imageview)
+            self.imageview.contentMode = .scaleAspectFill
         }
        
     }
     
+    static let identifier = "ChatTableViewCell"
+    static func nib() -> UINib {
+        return UINib(nibName: "ChatTableViewCell", bundle: nil)
+    }
 }

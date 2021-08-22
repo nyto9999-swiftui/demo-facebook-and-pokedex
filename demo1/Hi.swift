@@ -17,6 +17,13 @@ class Hi {
         case observeSingleEvent
     }
     
+    public enum StorageErrors: Error {
+        case failedToUploadSinglePicture
+        case failedToUploadPictures
+        case failedToUpload
+        case failedToGetDownloadUrl
+    }
+    
     public static let dataFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium

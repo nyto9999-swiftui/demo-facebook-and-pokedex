@@ -7,36 +7,43 @@
 
 import UIKit
 import MessageKit
-import  InputBarAccessoryView
+import InputBarAccessoryView
 import SDWebImage
-
 
 class MSGViewController: MessagesViewController {
     
-    
-    
-    
-    public var isNewConversation = false
+    private var senderPhotoURL: URL?
+    private var receiverPhotoURL: URL?
     private let conversationId: String?
-    public let receiver: String
-    
-    
+    public let receiverId: String
+    private let receiverName: String
+    public let email = UserDefaults.standard.string(forKey: "email")
+    public let name = UserDefaults.standard.string(forKey: "name")
     private var messages = [Message]()
     
     private var currentUser: Sender? {
-        guard let email = UserDefaults.standard.string(forKey: "email") else {
-            return nil
-        }
-        let safeEmail = DatabaseManager.safeString(for: email)
-        return Sender(photoURL: "", senderId: safeEmail, displayName: "me")
+        let safeEmail = DatabaseManager.safeString(for: email ?? "email empty")
+        return Sender(photoURL: "", senderId: safeEmail, displayName: name ?? "name empty")
     }
     private var createConversationId: String? {
-        guard  let currentUserEmail = UserDefaults.standard.string(forKey: "email") else {
-            return nil
-        }
-        let currentUser = DatabaseManager.safeString(for: currentUserEmail)
-        let conversationId = "\(receiver)_\(currentUser)"
+        let currentUser = DatabaseManager.safeString(for: email ?? "email empty")
+        let conversationId = "\(receiverId)_\(currentUser)"
         return conversationId
+    }
+    private func createMessageId() -> String? {
+        // date, otherUserEmail, senderEmail, randomInt
+        return UUID().uuidString
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+    }
+    
+    private func setup(){
+        messagesCollectionView.messagesDataSource = self
+        messagesCollectionView.messagesLayoutDelegate = self
+        messagesCollectionView.messagesDisplayDelegate = self
+        messageInputBar.delegate = self
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -52,30 +59,18 @@ class MSGViewController: MessagesViewController {
         }
     }
     
-    
-    init(with email: String, id: String?){
+    init(with email: String, id: String?, receiverName: String){
         self.conversationId = id
-        self.receiver = email
+        self.receiverId = email
+        self.receiverName = receiverName
         super.init(nibName: nil, bundle: nil)
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .red
-        
-        messagesCollectionView.messagesDataSource = self
-        messagesCollectionView.messagesLayoutDelegate = self
-        messagesCollectionView.messagesDisplayDelegate = self
-        messageInputBar.delegate = self
-        setupInputButton()
-        
-        
-    }
+    //從Firebase/conversation/conversationId讀取訊息
     private func listenForMessages(for conversationId: String, shouldScrollToBottom: Bool) {
         
         DatabaseManager.shared.getAllMessages(with: conversationId, completion: { [weak self] result in
@@ -98,27 +93,9 @@ class MSGViewController: MessagesViewController {
             }
         })
     }
-    
-    private func setupInputButton(){
-        let button = InputBarButtonItem()
-        button.setSize(CGSize(width: 35, height: 35), animated: false)
-        button.setImage(UIImage(systemName: "paperclip"), for: .normal)
-        button.onTouchUpInside({ [weak self] _ in
-            print("yes")
-        })
-        messageInputBar.setLeftStackViewWidthConstant(to: 36, animated: false)
-        messageInputBar.setStackViewItems([button], forStack: .left, animated: false)
-    }
-    
-    //MARK: ConversationID
-    private func createMessageId() -> String? {
-        // date, otherUserEmail, senderEmail, randomInt
-        return UUID().uuidString
-    }
-    
-    
 }
 
+//MARK: Message
 extension MSGViewController: MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate {
     
     //who the current sender is
@@ -137,19 +114,56 @@ extension MSGViewController: MessagesDataSource, MessagesLayoutDelegate, Message
         return messages.count
     }
     
-    func configureMediaMessageImageView(_ imageView: UIImageView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        guard let message = message as? Message else {
-            return
-        }
-        
-        switch message.kind {
-        case .photo(let media):
-            guard let imageUrl = media.url else {
-                return
+    func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
+        let sender = message.sender
+        if sender.senderId == currentUser?.senderId {
+            if let currentUserImageURL = self.senderPhotoURL {
+                avatarView.sd_setImage(with: currentUserImageURL, completed: nil)
             }
-            imageView.sd_setImage(with: imageUrl, completed: nil)
-        default:
-            break
+            else {
+                guard let email = UserDefaults.standard.string(forKey: "email") else {
+                    return
+                }
+                let safeEmail = DatabaseManager.safeString(for: email)
+                let path = "profile/\(safeEmail)_profile_picture.png"
+                
+                //fetch url
+                StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
+                    switch result {
+                    case .success(let url):
+                        self?.senderPhotoURL = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url, completed: nil)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+            }
+        }
+        else{
+            if let receiverPhotoURL = self.receiverPhotoURL {
+                avatarView.sd_setImage(with: receiverPhotoURL, completed: nil)
+            }
+            else {
+                let email = self.receiverId
+                let safeEmail = DatabaseManager.safeString(for: email)
+                let path = "profile/\(safeEmail)_profile_picture.png"
+                
+                //fetch url
+                StorageManager.shared.downloadUrl(for: path, completion: { [weak self] result in
+                    switch result {
+                    case .success(let url):
+                        self?.receiverPhotoURL = url
+                        DispatchQueue.main.async {
+                            avatarView.sd_setImage(with: url, completed: nil)
+                        }
+                    case .failure(let error):
+                        print("\(error)")
+                    }
+                })
+
+            }
         }
     }
 }
@@ -162,7 +176,7 @@ extension MSGViewController: InputBarAccessoryViewDelegate {
         }
         let message = Message(sender: currentSender, messageId: messageId, sentDate: Date(), kind: .text(text))
         
-        DatabaseManager.shared.sendMessage(conversationID: conversationId, receiver: receiver, senderName: self.title ?? "User", message: message, completion: { success in
+        DatabaseManager.shared.sendMessage(conversationID: conversationId, receiverId: receiverId, receiverName: receiverName, message: message, completion: { success in
             
             if success {
                 print("meesage sent")
@@ -171,8 +185,6 @@ extension MSGViewController: InputBarAccessoryViewDelegate {
                 print("failed to send")
             }
         })
-        
-        
     }
 }
 

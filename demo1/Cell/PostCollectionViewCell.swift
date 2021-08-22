@@ -10,9 +10,7 @@ import SDWebImage
 class PostCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var imageView: UIImageView!
-    static let identifier = "PostCollectionViewCell"
-    
-    
+
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,6 +24,7 @@ class PostCollectionViewCell: UICollectionViewCell {
         imageView.image = image
     }
     
+    static let identifier = "PostCollectionViewCell"
     static func nib() -> UINib {
         return UINib(nibName: "PostCollectionViewCell", bundle: nil)
     }

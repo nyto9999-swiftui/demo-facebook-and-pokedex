@@ -5,6 +5,7 @@
 //  Created by 宇宣 Chen on 2021/8/1.
 //
 import UIKit
+
 struct AppUser {
    
     let name: String

@@ -13,11 +13,14 @@ class ChatViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Chat"
         talbeview.register(ChatTableViewCell.nib(), forCellReuseIdentifier: ChatTableViewCell.identifier)
         talbeview.delegate = self
         talbeview.dataSource = self
         getAllConversations()
     }
+    
+    //從Firebase/users/當前使用者的email/latestMessage讀取資料
     private func getAllConversations(){
         let user = UserDefaults.standard.string(forKey: "email")
         let safeUser = DatabaseManager.safeString(for: user!)
@@ -26,16 +29,22 @@ class ChatViewController: UIViewController {
             switch result {
             case .success(let conversations):
                 self?.conversationFeed = conversations
-                self?.talbeview.reloadData()
+                DispatchQueue.main.async {
+                    self?.talbeview.reloadData()
+                }
             case .failure(let error):
                 print(error)
+
+                DispatchQueue.main.async {
+                    self?.talbeview.reloadData()
+                }
             }
         })
     }
 }
 
 
-
+//MARK:Tableview
 extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return conversationFeed.count
@@ -47,15 +56,12 @@ extension ChatViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
+    //Navigate to MSG VC
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = MSGViewController(with: conversationFeed[indexPath.row].otherUserEmail, id: conversationFeed[indexPath.row].id
-                                   
-        )
-        vc.title = conversationFeed[indexPath.row].name
+        let vc = MSGViewController(with: conversationFeed[indexPath.row].receiverEmail, id: conversationFeed[indexPath.row].id, receiverName: conversationFeed[indexPath.row].receiverName)
+        
+        vc.title = conversationFeed[indexPath.row].senderName
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }

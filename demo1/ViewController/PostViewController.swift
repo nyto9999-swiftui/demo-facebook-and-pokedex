@@ -16,32 +16,44 @@ class PostViewController: UIViewController {
     @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var profileImageView: UIImageView!
-    var segueImage:UIImage?
+
+    var segueImage:UIImage? /*MainVC*/
     let safeEmail = DatabaseManager.safeString(for: UserDefaults.standard.string(forKey: "email")!)
     var selectedAssets = [PHAsset]()
     var images = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let image = segueImage {
-            self.profileImageView.image = image
-        }
         setup()
-        collectionSetup()
     }
     
     private func setup(){
+        if let image = segueImage {
+            self.profileImageView.image = image
+        }
         let name = UserDefaults.standard.string(forKey: "name")
         nameLabel.text = name
-//        StorageManager.shared.getUIImageData(path: "profile/\(safeEmail)_profile_picture.png", for: profileImageView)
         
+        collectionView.frame = CGRect(x: 0,y: 0,width: view.frame.width,height: 0)
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
+        layout.itemSize = CGSize(width: collectionView.width/3-20, height: collectionView.width/3-20)
+        layout.minimumLineSpacing = 5
+        layout.minimumInteritemSpacing = 0
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.collectionViewLayout = layout
+        collectionView.register(PostCollectionViewCell.nib(), forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
     }
     
+    
+    /// 相機icon
     @IBAction func camera(_ sender: Any) {
         runImagePicker()
     }
     
-    /*post */
+    /// 上傳貼文到Firebase
+    /// insertPost() -> uploadImages()
     @IBAction func sentPost(_ sender: Any) {
         // generate unique postID
         let time = Date().timeIntervalSince1970
@@ -80,20 +92,8 @@ class PostViewController: UIViewController {
         textView.text = ""
         images = [UIImage]()
     }
-
-    func collectionSetup() -> Void{
-        collectionView.frame = CGRect(x: 0,y: 0,width: view.frame.width,height: 0)
-        let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 10, right: 0)
-        layout.itemSize = CGSize(width: collectionView.width/3-20, height: collectionView.width/3-20)
-        layout.minimumLineSpacing = 5
-        layout.minimumInteritemSpacing = 0
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.collectionViewLayout = layout
-        collectionView.register(PostCollectionViewCell.nib(), forCellWithReuseIdentifier: PostCollectionViewCell.identifier)
-    }
     
+    /// 開啟photo libaray -> convertAssetsToImg()
     func runImagePicker() {
         let imagePicker = ImagePickerController()
         
@@ -116,9 +116,8 @@ class PostViewController: UIViewController {
         }, completion: nil)
     }
     
-    func convertAssetsToImg() -> Void{
+    func convertAssetsToImg() {
         if selectedAssets.count != 0{
-            
             for i in 0..<selectedAssets.count{
                 
                 // reciving request to convert assets to images
@@ -140,34 +139,14 @@ class PostViewController: UIViewController {
                     
                 }
             }
-            
             selectedAssets = []
-            
-            //The button is enabled if there is images
-            
-            
-            
         }
-        
         print("complete photo array \(self.images)")
     }
-    
-    
-    
-    
 }
 
-extension PostViewController: UICollectionViewDelegate{
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        print("delete tapped image")
-        images.remove(at: indexPath.row)
-        
-        self.collectionView.reloadData()
-    }
-}
-
-extension PostViewController: UICollectionViewDataSource{
+//MARK: CollectionView
+extension PostViewController: UICollectionViewDataSource, UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
     }
@@ -176,11 +155,18 @@ extension PostViewController: UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PostCollectionViewCell.identifier, for: indexPath) as! PostCollectionViewCell
         
         cell.configure(with: images[indexPath.row])
-        
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+    
+        images.remove(at: indexPath.row)
+        self.collectionView.reloadData()
     }
 }
 
+//MARK: photo library
 extension PostViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)

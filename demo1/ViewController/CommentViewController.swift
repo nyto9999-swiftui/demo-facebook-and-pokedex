@@ -7,8 +7,6 @@
 
 import UIKit
 
-
-
 class CommentViewController: UIViewController {
     let post = ""
     var CommentFeed = [Comment]()
@@ -16,49 +14,46 @@ class CommentViewController: UIViewController {
     @IBOutlet weak var comment: UITextField!
     @IBOutlet weak var tableview: UITableView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         getAllComments()
         setup()
-        
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        let postID = UserDefaults.standard.string(forKey: "postID")
-    }
+    //基本設定
     public func setup(){
         comment.addTarget(self, action: #selector(didTapEnter), for: UIControl.Event.primaryActionTriggered)
         
-        
         tableview.register(CommentTableViewCell.nib(), forCellReuseIdentifier: CommentTableViewCell.identifier)
-        
         tableview.delegate = self
         tableview.dataSource = self
     }
-    //textfield
+    
+    //CommentVC 的 textfield
     @objc func didTapEnter() {
         guard comment.text != nil else {
             print("empty comment ")
             return
         }
+        
         guard let postID = UserDefaults.standard.string(forKey: "postID"),
               let sender = UserDefaults.standard.string(forKey: "name"),
               let senderIcon = UserDefaults.standard.string(forKey: "senderIcon") else {
             print("failed to get postID")
             return
         }
+        
         let comment = Comment(commentID: UUID().uuidString, postID: postID, sender: sender, txt: comment.text!, senderIcon: senderIcon, createdAt: "")
+        
         DatabaseManager.shared.insertComment(for: postID, comment: comment)
         
         DispatchQueue.main.async {
-            
-            
             self.CommentFeed.sort { $0.createdAt > $1.createdAt}
             self.tableview.reloadData()
         }
     }
     
+    //從Firebase/comment 獲取所有貼文
     private func getAllComments(){
         guard let postID = UserDefaults.standard.string(forKey: "postID") else {
             return
@@ -78,6 +73,7 @@ class CommentViewController: UIViewController {
 
 }
 
+//MARK: Tableview
 extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return CommentFeed.count
@@ -87,7 +83,6 @@ extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableview.dequeueReusableCell(withIdentifier: CommentTableViewCell.identifier, for: indexPath) as! CommentTableViewCell
         
         cell.configure(with: CommentFeed[indexPath.row])
-        
         return cell
     }
 }

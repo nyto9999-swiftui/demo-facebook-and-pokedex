@@ -14,7 +14,6 @@
 		8D0E784526B5B0E400004F35 /* Hi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784426B5B0E400004F35 /* Hi.swift */; };
 		8D0E784A26B5BC3D00004F35 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784926B5BC3D00004F35 /* Post.swift */; };
 		8D0E784C26B5BC4900004F35 /* AppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D0E784B26B5BC4900004F35 /* AppUser.swift */; };
-		8D15C72326C47AAA00219BD0 /* RegisterScrollViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */; };
 		8D78A9D626ABFE90006F538D /* BottomSheetController in Frameworks */ = {isa = PBXBuildFile; productRef = 8D78A9D526ABFE90006F538D /* BottomSheetController */; };
 		8D78A9D826ABFF23006F538D /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D78A9D726ABFF23006F538D /* PostViewController.swift */; };
 		8D873A6226A9FD8C00C82044 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */; };
@@ -58,7 +57,6 @@
 		8D0E784426B5B0E400004F35 /* Hi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hi.swift; sourceTree = "<group>"; };
 		8D0E784926B5BC3D00004F35 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		8D0E784B26B5BC4900004F35 /* AppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppUser.swift; sourceTree = "<group>"; };
-		8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScrollViewController.swift; sourceTree = "<group>"; };
 		8D78A9D726ABFF23006F538D /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		8D873A6126A9FD8C00C82044 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D873A6326AA210D00C82044 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 				8DD216A126A981E500D00E14 /* Info.plist */,
 				8D873A6526AA9A8600C82044 /* UI + Extension.swift */,
 				8D0E784426B5B0E400004F35 /* Hi.swift */,
-				8D15C72226C47AAA00219BD0 /* RegisterScrollViewController.swift */,
 			);
 			path = demo1;
 			sourceTree = "<group>";
@@ -342,7 +339,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D15C72326C47AAA00219BD0 /* RegisterScrollViewController.swift in Sources */,
 				8D873A6826AA9AEE00C82044 /* DatabaseManager.swift in Sources */,
 				8DD2169826A981E500D00E14 /* MainViewController.swift in Sources */,
 				8D873A6626AA9A8600C82044 /* UI + Extension.swift in Sources */,

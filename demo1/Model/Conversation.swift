@@ -9,8 +9,9 @@ import Foundation
 
 struct Conversation {
     let id: String
-    let name: String
-    let otherUserEmail: String
+    let senderName: String
+    let receiverName: String
+    let receiverEmail: String // for downloading icon image 
     let latestMessage: LatestMessage
 }
 

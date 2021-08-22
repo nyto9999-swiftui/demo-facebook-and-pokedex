@@ -16,7 +16,6 @@ struct Post {
     var image: [UIImage]?
     var imageCount: Int?
     
-    
     var safePost: String {
         let safePostID = postID.replacingOccurrences(of: ".", with: "-")
         return safePostID

@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseAuth
 import FBSDKLoginKit
+
 class LoginViewController: UIViewController {
     @IBOutlet weak var emailTextfield: UITextField!
     @IBOutlet weak var passwordTextfield: UITextField!
@@ -19,6 +20,7 @@ class LoginViewController: UIViewController {
         
     }
     
+    /// 基本設定
     private func setup(){
         emailTextfield.textfieldImage(imageName: "envelope")
         passwordTextfield.textfieldImage(imageName: "key")
@@ -27,6 +29,7 @@ class LoginViewController: UIViewController {
     }
 
     
+    /// 點擊LoginVC的Facebook按鈕
     @IBAction func didTapFacebook(_ sender: Any) {
         let loginButton = FBLoginButton()
         loginButton.delegate = self
@@ -37,6 +40,9 @@ class LoginViewController: UIViewController {
         
     }
     
+    /// 點擊登入按鈕
+    /// 簡單的validation -> Firebase signIn -> dismiss LoginVC
+    /// - Parameter sender: <#sender description#>
     @IBAction func didTapLogin(_ sender: Any) {
         guard let email = emailTextfield.text, let password = passwordTextfield.text, !email.isEmpty, !password.isEmpty else {
             print("login validation fail")
@@ -51,7 +57,7 @@ class LoginViewController: UIViewController {
             
             let safeEmail = DatabaseManager.safeString(for: email)
             UserDefaults.standard.set(email, forKey: "email")
-            DatabaseManager.shared.getUsername(path: safeEmail, completion: { result in
+            DatabaseManager.shared.getUsername(username: safeEmail, completion: { result in
                 switch result {
                 case .success(let username):
                     UserDefaults.standard.set("\(username)",forKey: "name")
@@ -62,14 +68,13 @@ class LoginViewController: UIViewController {
             self?.dismiss(animated: true, completion: nil)
         })
     }
-    
-    
-    
 }
 
 
 // MARK: Facebook LogIn
 extension LoginViewController: LoginButtonDelegate {
+    /// Facebook 登入
+    /// 獲取token -> GraphRequest -> userDefault(email,name) -> 確認是否重複註冊到Firebase -> Firebase.credential(token) -> Firebase sign in -> self dismiss
     func loginButton(_ loginButton: FBLoginButton, didCompleteWith result: LoginManagerLoginResult?, error: Error?) {
         guard  let token = result?.token?.tokenString else {
             print("User failed to log in with facebook")
@@ -143,6 +148,7 @@ extension LoginViewController: LoginButtonDelegate {
             })
         })
     }
+    /// Facebook登出
     func loginButtonDidLogOut(_ loginButton: FBLoginButton) {
         // no operation
     }

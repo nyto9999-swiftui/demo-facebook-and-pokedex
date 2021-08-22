@@ -9,23 +9,16 @@ import SwiftUI
 import FirebaseAuth
 import FBSDKLoginKit
 
-
 class MainViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var userInforArea: UIView!
-    var postsFeed:[Post] = []
-    var test:[Comment] = []
-    var array:[String] = []
-    let refreshControl = UIRefreshControl()
     
-    let zoomImageview = UIView()
-    let startingFrame = CGRect(x: 50,y: 50,width: 200,height: 100)
+    var postsFeed:[Post] = []
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         validateAuth()
         setup()
         getAllPosts()
@@ -33,14 +26,15 @@ class MainViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationController?.setNavigationBarHidden(true, animated: animated)
-        tableView.reloadData()
-    }
-    @IBAction func createPost(_ sender: Any) {
-        performSegue(withIdentifier: "createPost", sender: nil)
-        
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
     
+    /// 準備圖片給PostVC 的 profile icon
+    @IBAction func createPost(_ sender: Any) {
+        performSegue(withIdentifier: "createPost", sender: nil)
+    }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "createPost" {
             print("yes")
@@ -49,7 +43,7 @@ class MainViewController: UIViewController {
         }
     }
     
-    //if not  users, back to login vc
+    // 如果不是Firebase認證的使用者,回到LoginVC
     private func validateAuth(){
         if FirebaseAuth.Auth.auth().currentUser == nil {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -58,6 +52,7 @@ class MainViewController: UIViewController {
         }
     }
     
+    // 基本設定
     private func setup() {
         nameLabel.text = UserDefaults.standard.string(forKey: "name")
         let safeEmail = DatabaseManager.shared.getSafeString()
@@ -80,18 +75,16 @@ class MainViewController: UIViewController {
         tableView.dataSource = self
         tableView.backgroundColor = .systemGray2
         getAllPosts()
-        
     }
-    
     
     @objc func refresh(_ sender: AnyObject){
         getAllPosts()
-        refreshControl.endRefreshing()
-        tableView.reloadData()
+        DispatchQueue.main.async {
+            self.refreshControl.endRefreshing()
+        }
     }
     
-    
-    
+    /// 從Firebase獲取全部貼文
     private func getAllPosts() {
         DatabaseManager.shared.getAllPosts( completion: {[weak self] gotPosts in
             switch gotPosts {
@@ -99,7 +92,9 @@ class MainViewController: UIViewController {
                 guard posts.count == self?.postsFeed.count else {
                     self?.postsFeed = posts
                     self?.postsFeed.sort { $0.postID < $1.postID}
-                    self?.tableView.reloadData()
+                    DispatchQueue.main.async {
+                        self?.tableView.reloadData()
+                    }
                     return
                 }
             case .failure(let error):
@@ -108,27 +103,13 @@ class MainViewController: UIViewController {
             }
         })
     }
-    
-    @IBAction func test(_ sender: Any) {
-        DatabaseManager.shared.getAllConversations(for: "nyto4826-yahoo-com-tw", completion: { result in
-            switch result {
-            case .success(let conversations):
-                
-            print(conversations.count)
-            case .failure(_):
-                print("error")
-            }
-            
-        })
-    }
 }
-let cellSpacingHeight: CGFloat = 5
+
 
 //MARK:Talbeview
+let cellSpacingHeight: CGFloat = 5
 extension MainViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return cellSpacingHeight
-    }
+ 
     func numberOfSections(in tableView: UITableView) -> Int {
         
         return self.postsFeed.count
@@ -137,19 +118,21 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = UIColor.clear
-        return headerView
+ 
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return cellSpacingHeight
     }
-    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        footerView.backgroundColor = UIColor.clear
+        return footerView
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MainPostTableViewCell.identifier, for: indexPath) as! MainPostTableViewCell
-//        cell.postImageView.isUserInteractionEnabled = true
+
         cell.configure(with: postsFeed[indexPath.section])
-        
+        print(postsFeed.count)
         //add border and color
         cell.backgroundColor = UIColor.white
         
@@ -171,24 +154,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         postsFeed.remove(at: sender.tag)
         tableView.reloadData()
     }
-
     @objc func goComment(sender: UIButton) {
         let safeEmail = DatabaseManager.shared.getSafeString()
         UserDefaults.standard.setValue(postsFeed[sender.tag].postID, forKey: "postID")
-        print("jfdklasjf\(sender.tag)")
+
         UserDefaults.standard.setValue("profile/\(safeEmail)_profile_picture.png", forKey: "senderIcon")
         print(postsFeed[sender.tag].postID)
-        
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(identifier: "CommentViewController") as! CommentViewController
         present(vc, animated: true)
     }
-    
-   
-    
-
 }
 
+//點擊profile icon 登出
 extension MainViewController:UIScrollViewDelegate{
     @objc func didTapProfileImage(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -217,10 +196,6 @@ extension MainViewController:UIScrollViewDelegate{
     @objc func alertSheetDismiss(){
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
-
-    
 }
 
 

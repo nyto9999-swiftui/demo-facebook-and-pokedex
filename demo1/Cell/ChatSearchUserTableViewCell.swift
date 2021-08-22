@@ -12,16 +12,9 @@ class ChatSearchUserTableViewCell: UITableViewCell {
     @IBOutlet weak var label:UILabel!
     var appUserFeed:AppUser?
     
-    
-    static let identifier = "ChatSearchUserTableViewCell"
-    
-    static func nib() -> UINib {
-        return UINib(nibName: "ChatSearchUserTableViewCell", bundle: nil)
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = .green
+        
         // Initialization code
     }
     
@@ -32,8 +25,10 @@ class ChatSearchUserTableViewCell: UITableViewCell {
         if let path = appUserFeed?.profilePictureName {
             StorageManager.shared.getUIImageForCell(path: "profile/\(path)", imgview: self.imageview)
         }
-        
-        self.imageview.backgroundColor = .red
     }
     
+    static let identifier = "ChatSearchUserTableViewCell"
+    static func nib() -> UINib {
+        return UINib(nibName: "ChatSearchUserTableViewCell", bundle: nil)
+    }
 }

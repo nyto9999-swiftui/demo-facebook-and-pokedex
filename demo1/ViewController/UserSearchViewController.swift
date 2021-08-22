@@ -8,18 +8,19 @@
 import UIKit
 
 class UserSearchViewController: UIViewController {
-    var txt = ""
-    var userFound = [AppUser]()
+
     lazy var searchBar:UISearchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: view.width, height: 20))
     @IBOutlet weak var tableview: UITableView!
     
+    var searchString = ""
+    var userFound = [AppUser]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setup()
     }
     
-    
+    //基本設定
     private func setup(){
         tableview.register(ChatSearchUserTableViewCell.nib(), forCellReuseIdentifier: ChatSearchUserTableViewCell.identifier)
         tableview.delegate = self
@@ -34,6 +35,8 @@ class UserSearchViewController: UIViewController {
     }
 
 }
+
+//MARK: Tableview
 extension UserSearchViewController: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return userFound.count
@@ -47,9 +50,9 @@ extension UserSearchViewController: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = userFound[indexPath.row]
-        let vc = MSGViewController(with: model.safeEmail, id: nil)
-        vc.title = model.name
+        let userfound = userFound[indexPath.row]
+        let vc = MSGViewController(with: userfound.safeEmail, id: nil, receiverName: userfound.name)
+        vc.title = userfound.name
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -57,6 +60,7 @@ extension UserSearchViewController: UITableViewDelegate,UITableViewDataSource{
     
 }
 
+//MARK: Searchbar
 extension UserSearchViewController: UISearchBarDelegate  {
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         
@@ -64,31 +68,32 @@ extension UserSearchViewController: UISearchBarDelegate  {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         NSObject.cancelPreviousPerformRequests(withTarget: self)
+        searchString = searchText
         self.perform(#selector(searchUser), with: searchText, afterDelay: 0.5)
-        txt = searchText
-        if txt == ""{
-            self.userFound = []
-            self.tableview.reloadData()
-        }
     }
     
     @objc func searchUser(){
+        
         DatabaseManager.shared.getALlUsers(completion: { [weak self] result in
             switch result{
             case .success(let appUser):
                 for eachUser in appUser {
-                    if eachUser.name == (self?.txt.lowercased())! {
+                    //MARK: bug
+                    guard  let searchString = self?.searchString.lowercased() else {
+                        return
+                    }
+                    if eachUser.name == searchString {
+                        self?.userFound = []
                         self?.userFound.append(eachUser)
-                        self?.tableview.reloadData()
+                        DispatchQueue.main.async {
+                            self?.tableview.reloadData()
+                        }
                     }
                 }
             case .failure(let err):
                 print(err)
-                
             }
         })
-        
-        
     }
 }
 

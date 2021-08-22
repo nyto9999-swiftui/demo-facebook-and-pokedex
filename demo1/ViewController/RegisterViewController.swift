@@ -21,6 +21,7 @@ class RegisterViewController: UIViewController {
         setup()
     }
     
+    /// 基本設定
     private func setup(){
         imageView.isUserInteractionEnabled = true
         let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapPicture))
@@ -40,10 +41,13 @@ class RegisterViewController: UIViewController {
     
     
     
+    /// 點擊頭像彈出Photo libary action sheet
     @objc private func didTapPicture(){
         presentPhotoActionSheet()
     }
     
+    /// 點擊註冊按鈕
+    /// 簡單的validation -> 確認是否重複註冊到Firebase -> Firebase用戶註冊 -> Insert 用戶到Firebase -> 上傳頭像到Storage -> dismiss
     @IBAction func didTapSignup(_ sender: Any) {
         guard let firstname = firstNameTextfield.text,
               let lastname = lastNameTextfield.text,
@@ -101,6 +105,7 @@ class RegisterViewController: UIViewController {
     }
 }
 extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    /// 上傳頭像圖片 action sheet
     func presentPhotoActionSheet() {
         let actionSheet = UIAlertController(title: "Profile Picture",
                                             message: "How would you like to select a picture?",
@@ -126,6 +131,7 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
         present(actionSheet, animated: true)
     }
     
+    /// 相機
     func presentCamera() {
         let vc = UIImagePickerController()
         vc.sourceType = .camera
@@ -133,7 +139,8 @@ extension RegisterViewController: UIImagePickerControllerDelegate, UINavigationC
         vc.allowsEditing = true
         present(vc, animated: true)
     }
-
+    
+    /// photo library
     func presentPhotoPicker() {
         let vc = UIImagePickerController()
         vc.sourceType = .photoLibrary
