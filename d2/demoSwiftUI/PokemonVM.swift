@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+import Kingfisher
 
 
 
@@ -20,7 +22,7 @@ class PokemonVM: ObservableObject {
     
     init() {
         
-        
+    
         // fectch pokemon by type
         getPokemonByType()
         getAllPokemon()
@@ -33,6 +35,8 @@ class PokemonVM: ObservableObject {
         
         
     }
+    
+
     
     private func getPokemonByType() {
         
@@ -57,6 +61,8 @@ class PokemonVM: ObservableObject {
             }
             task.resume()
         }
+        
+        
     }
     
     private func getPokemonByGen(){
@@ -84,7 +90,7 @@ class PokemonVM: ObservableObject {
     }
     
     private func getAllPokemon(){
-        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=100&offset=0") else {
+        guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=897&offset=0") else {
             return
         }
         
@@ -107,3 +113,5 @@ class PokemonVM: ObservableObject {
         task2.resume()
     }
 }
+
+

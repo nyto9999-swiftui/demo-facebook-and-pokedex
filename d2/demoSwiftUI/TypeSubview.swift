@@ -11,7 +11,7 @@ struct TypeSubview: View {
     
     @Binding var selectedTab : String
     @Binding var typeString: String
-    
+    @Binding var isEditing : Bool
     var body: some View {
         
         if selectedTab == "Type" {
@@ -26,16 +26,17 @@ struct TypeSubview: View {
                         .frame(width: 40, height: 40)
                         .onTapGesture {
                             typeString = type.lowercased()
+                            isEditing = false
                         }
                 }
-                
             }
             .padding(.vertical,10)
             .padding([.leading, .trailing], 20)
-            .background(Color.lightBlue)
+            .background(Color.pokeRed)
             .clipShape(Capsule())
             .shadow(color: Color.darkShadow, radius: 5, x: 2, y: 2)
             .shadow(color: Color.lightShadow, radius: 5, x: -3, y: -3)
+            
 
         }
         if selectedTab == "Gen" {
@@ -51,13 +52,15 @@ struct TypeSubview: View {
                         .onTapGesture {
                             print("\(gen)")
                             typeString = gen
+                            
+                            isEditing = false
                         }
                 }
                 
             }
             .padding(.vertical,10)
             .padding([.leading, .trailing], 20)
-            .background(Color.red)
+            .background(Color.pokeRed)
             .clipShape(Capsule())
             .shadow(color: Color.darkShadow, radius: 5, x: 2, y: 2)
             .shadow(color: Color.lightShadow, radius: 5, x: -3, y: -3)
@@ -65,4 +68,11 @@ struct TypeSubview: View {
     }
 }
 
-
+extension View {
+  @ViewBuilder func hidden(_ shouldHide: Bool) -> some View {
+    switch shouldHide {
+      case true: self.hidden()
+      case false: self
+    }
+  }
+}

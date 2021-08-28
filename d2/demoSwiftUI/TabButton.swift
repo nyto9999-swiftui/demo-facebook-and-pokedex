@@ -25,6 +25,7 @@ struct TabButton: View {
                     .minimumScaleFactor(0.1)
                     .font(.title3)
                     .lineLimit(1)
+                 
                    
                 
                 if selectedTab == title {

@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-var scroll_Tabs = ["","Gen", "Type", "Strengh"]
+
+var scroll_Tabs = ["","Gen", "Type"]
 let generation = ["1","2","3","4","5","6","7","8"]
 let typeArray = ["bug","fire","dragon","electric","fighting", "ice", "normal", "dark", "fairy", "flying", "ghost", "grass", "ground", "psychic", "poison", "rock", "water", "steel"]
 
@@ -43,15 +44,15 @@ struct Img: Hashable, Codable {
 struct pokemonTypeArray: Hashable, Codable {
     let pokemon: [Pokemons]
 }
-struct Pokemons: Hashable, Codable {
-    let pokemon: Pokemon
-}
+    struct Pokemons: Hashable, Codable {
+        let pokemon: Pokemon
+        
+    }
 
 struct Pokemon: Hashable, Codable {
     let name: String
     let url: String
 }
-
 
 
 //gen
@@ -63,3 +64,8 @@ struct PokemonByGen: Hashable, Codable {
     let name: String
     let url: String
 }
+
+
+
+
+
