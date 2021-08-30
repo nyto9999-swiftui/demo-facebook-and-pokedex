@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8D00A85A26DB57B30012A3E9 /* PokemonDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00A85926DB57B30012A3E9 /* PokemonDetailView.swift */; };
 		8DC81DB926D1FC76001E7790 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81DB826D1FC76001E7790 /* AppDelegate.swift */; };
 		8DC81DBB26D1FC76001E7790 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81DBA26D1FC76001E7790 /* SceneDelegate.swift */; };
 		8DC81DBD26D1FC76001E7790 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC81DBC26D1FC76001E7790 /* ContentView.swift */; };
@@ -42,10 +43,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8D00A85926DB57B30012A3E9 /* PokemonDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonDetailView.swift; sourceTree = "<group>"; };
 		8DC81DB526D1FC76001E7790 /* demoSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demoSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DC81DB826D1FC76001E7790 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8DC81DBA26D1FC76001E7790 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8DC81DBC26D1FC76001E7790 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		8DC81DBC26D1FC76001E7790 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		8DC81DBE26D1FC76001E7790 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8DC81DC126D1FC76001E7790 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8DC81DC426D1FC76001E7790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 				8DC81DED26D4CE9B001E7790 /* PokemonVM.swift */,
 				8DD3F7C526D5F6490098A08C /* TabButton.swift */,
 				8DD3F7CC26D755850098A08C /* Extension.swift */,
+				8D00A85926DB57B30012A3E9 /* PokemonDetailView.swift */,
 			);
 			path = demoSwiftUI;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				8DC81DEE26D4CE9B001E7790 /* PokemonVM.swift in Sources */,
 				8DD3F7C626D5F6490098A08C /* TabButton.swift in Sources */,
 				8DD3F7CB26D608E00098A08C /* TypeSubview.swift in Sources */,
+				8D00A85A26DB57B30012A3E9 /* PokemonDetailView.swift in Sources */,
 				8DC81DBD26D1FC76001E7790 /* ContentView.swift in Sources */,
 				8DC81DE926D4AA8F001E7790 /* Model.swift in Sources */,
 				8DD3F7CD26D755850098A08C /* Extension.swift in Sources */,

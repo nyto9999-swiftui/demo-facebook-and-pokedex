@@ -16,6 +16,7 @@ struct ContentView: View {
 @StateObject var pokeVM = PokemonVM()
 @State var selectedTab = scroll_Tabs[0]
 @State var type: String = ""
+
 @Namespace var animation
 
 private var isInt: Bool {
@@ -29,83 +30,82 @@ else {
 
 
 var body: some View {
-
-ZStack {
-    Color(red: 219/255, green: 215/255, blue: 207/255).edgesIgnoringSafeArea(.all)
-    
-    ScrollView {
-        VStack {
-            ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom), content: {
-                HStack {
-                    Text("Pokemon")
-                        .font(.title)
-                        .fontWeight(.heavy)
-                        .foregroundColor(.red).opacity(0.8)
-                    Spacer()
+    NavigationView{
+        ZStack {
+            Color(red: 219/255, green: 215/255, blue: 207/255).edgesIgnoringSafeArea(.all)
+            
+            ScrollView {
+                VStack {
+                    ZStack(alignment: Alignment(horizontal: .leading, vertical: .bottom), content: {
+                        HStack {
+                            Text("Pokemon")
+                                .font(.title)
+                                .fontWeight(.heavy)
+                                .foregroundColor(.red).opacity(0.8)
+                           
+                            Spacer()
+                            
+                            
+                        }
+                        .padding()
+                        ScrollView(.horizontal, showsIndicators: false){
+                            
+                            TypeSubview(selectedTab: $selectedTab, typeString: $type, isEditing: $isEditing)
+                                .padding()
+                         
+                        }
+                    })
+                    .edgesIgnoringSafeArea([.leading, .trailing])
                     
+                    
+                    ScrollView (.horizontal, showsIndicators: false) {
+                        
+                        HStack (spacing: 15){
+                            ForEach(scroll_Tabs.dropFirst(), id:\.self){tab in
+                                
+                                TabButton(title: tab, animation: animation, selectedTab: $selectedTab)
+                                
+                                
+                            }
+                            Spacer()
+                        }
+                    }
+                    .padding()
+                    
+                }
+                        
+                //Search bar
+                HStack {
+                    NeumorphicStyleTextField(textField: TextField("Search...", text: $searchText), imageName: "magnifyingglass")
+                        .onTapGesture {
+                            self.isEditing = true
+                        }
                 }
                 .padding()
-                ScrollView(.horizontal, showsIndicators: false){
-                    
-                    TypeSubview(selectedTab: $selectedTab, typeString: $type, isEditing: $isEditing)
-                        .padding()
-                 
-                }
-            })
-            .edgesIgnoringSafeArea([.leading, .trailing])
-            
-            
-            ScrollView (.horizontal, showsIndicators: false) {
-                
-                HStack (spacing: 15){
-                    ForEach(scroll_Tabs.dropFirst(), id:\.self){tab in
-                        
-                        TabButton(title: tab, animation: animation, selectedTab: $selectedTab)
-                        
-                        
+         
+                // 按下搜尋匡 isEditing = true   v
+                if isEditing {
+                    if !searchText.isEmpty {
+                        searchedPokemon(pokemon: pokeVM.pokemons, searchText: searchText)
                     }
-                    Spacer()
                 }
-            }
-            .padding()
-            
-        }
-				
-        //Search bar
-        HStack {
-            NeumorphicStyleTextField(textField: TextField("Search...", text: $searchText), imageName: "magnifyingglass")
-                .onTapGesture {
-                    self.isEditing = true
+                else {
+                    Section(header: Text(type.isInt ? "Generation \(type.capitalized)" : "\(type.capitalized)")
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .opacity(0.8)
+                                .foregroundColor(.red)){
+                        ScrollView {
+                            searchByGen(genDict: pokeVM.genDict, type: type)
+                            
+                            searchByType(typeDict: pokeVM.pokemonDict, type: type)
+                        }
+                    }
                 }
-        }
-        .padding()
- 
-        // 按下搜尋匡 isEditing = true   v
-        if isEditing {
-            if !searchText.isEmpty {
-                searchedPokemon(pokemon: pokeVM.pokemons, searchText: searchText)
+
             }
-        }
-        else {
-            Section(header: Text(type.isInt ? "Generation \(type.capitalized)" : "\(type.capitalized)")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .opacity(0.8)
-                        .foregroundColor(.red)){
-                ScrollView {
-                    searchByGen(genDict: pokeVM.genDict, type: type)
-                    
-                    searchByType(typeDict: pokeVM.pokemonDict, type: type)
-                }
-            }
-        }
-        
-        
-        
-        
-        
-    }
-}.listStyle(GroupedListStyle())
+        }.listStyle(GroupedListStyle())
+    }.navigationTitle("fjdlska")
 }
 
 
@@ -123,7 +123,6 @@ ContentView()
 struct searchByGen: View {
 let genDict: [String:[PokemonByGen]]
 let type: String
-
 var body: some View {
 
 LazyVGrid(columns: [
@@ -136,19 +135,21 @@ LazyVGrid(columns: [
     if let gen = genDict["\(type)"] {
         ForEach(0..<gen.count, id: \.self) { index in
             HStack (content: {
-                
-                VStack{
-                    Text(gen[index].name.capitalized)
-                        .minimumScaleFactor(0.1)
-                        .lineLimit(1)
-                        .font(.title)
-                        .padding(.top, 5)
-                    
-                    KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(gen[index].url[42..<gen[index].url.count-1]).png"))
-                        .resizable()
-                        .frame(width: 125, height: 125)
-                    
+                NavigationLink(destination: PokemonDetailView(name: gen[index].name)){
+                    VStack{
+                        Text(gen[index].name.capitalized)
+                            .minimumScaleFactor(0.1)
+                            .lineLimit(1)
+                            .font(.title)
+                            .padding(.top, 5)
+                        
+                        KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(gen[index].url[42..<gen[index].url.count-1]).png"))
+                            .resizable()
+                            .frame(width: 125, height: 125)
+                        
+                    }
                 }
+                
                 .background(Color.pokeRed)
                 .foregroundColor(Color(red: 219/255, green: 215/255, blue: 207/255))
                 .cornerRadius(6)
@@ -157,6 +158,7 @@ LazyVGrid(columns: [
                     
                 )
             })
+            
         }
     }
 }).padding([.leading, .trailing], 14)
