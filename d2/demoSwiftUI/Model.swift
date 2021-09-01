@@ -14,32 +14,13 @@ var stats = ["HP", "ATK", "DEF", "SA", "SD", "SP"]
 let generation = ["1","2","3","4","5","6","7","8"]
 let typeArray = ["bug","fire","dragon","electric","fighting", "ice", "normal", "dark", "fairy", "flying", "ghost", "grass", "ground", "psychic", "poison", "rock", "water", "steel"]
 
+// list all pokemons
 struct PokemonArray: Hashable, Codable {
     // let count: Int?
     // let next: String? "https://pokeapi.co/api/v2/pokemon?offset=3&limit=3"
     // let previous: String?
-    let results: [PokemonInfo]
+    let results: [Pokemon]
 }
-struct PokemonInfo: Hashable, Codable {
-    var name : String
-    var url : String // pokemon detail "https://pokeapi.co/api/v2/pokemon/2/"
-    
-    
-}
-
-struct PokemonDetail: Hashable, Codable {
-    // let abilities
-    // let form
-    // let moves
-    // type "grass" & "poison"
-    
-    let sprites : Img
-}
-
-struct Img: Hashable, Codable {
-    var front_default : String
-}
-
 
 
 //type
@@ -51,36 +32,19 @@ struct pokemonTypeArray: Hashable, Codable {
         
     }
 
+//gen
+struct pokemonGenArray: Hashable, Codable {
+    let pokemon_species: [Pokemon]
+}
+
+
 struct Pokemon: Hashable, Codable {
     let name: String
     let url: String
 }
 
 
-//gen
-struct pokemonGenArray: Hashable, Codable {
-    let pokemon_species: [PokemonByGen]
-}
-
-struct PokemonByGen: Hashable, Codable {
-    
-    let name: String
-    let url: String
-}
-
-
-
-//pokemon detail
-/*pokemon
-    ability {
-        name
-    }
-    height
-    weight
-    stats 基礎個體值
-    type {
-        name
-    }*/
+//specific pokemon info
 struct PokemonDetails: Hashable, Codable {
     let id: Int
     let types : [Type]
@@ -148,9 +112,19 @@ struct PokemonMoreDetail: Hashable, Codable {
 
 struct Flavor_text_entry: Hashable, Codable {
     var flavor_text : String
-    
+ 
     init() {
         flavor_text = ""
+      
     }
 }
 
+struct MoreInfo: Hashable, Codable {
+    var capture_rate : Int
+    var flavor_text : String
+    
+    init() {
+        flavor_text = ""
+        capture_rate = 0
+    }
+}

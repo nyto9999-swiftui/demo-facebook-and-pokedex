@@ -19,14 +19,7 @@ struct ContentView: View {
 
 @Namespace var animation
 
-private var isInt: Bool {
-if type.isInt {
-    return true
-}
-else {
-    return false
-}
-}
+
 
 
 var body: some View {
@@ -98,7 +91,7 @@ var body: some View {
                         ScrollView {
                             searchByGen(genDict: pokeVM.genDict, type: type)
                             
-                            searchByType(typeDict: pokeVM.pokemonDict, type: type)
+                            searchByType(typeDict: pokeVM.typeDict, type: type)
                         }
                     }
                 }
@@ -121,7 +114,7 @@ ContentView()
 }
 
 struct searchByGen: View {
-let genDict: [String:[PokemonByGen]]
+let genDict: [String:[Pokemon]]
 let type: String
 var body: some View {
 
@@ -134,8 +127,9 @@ LazyVGrid(columns: [
     //searched pokemon list
     if let gen = genDict["\(type)"] {
         ForEach(0..<gen.count, id: \.self) { index in
+            
             HStack (content: {
-                NavigationLink(destination: PokemonDetailView(name: gen[index].name)){
+                NavigationLink(destination: PokemonDetailView(name: gen[index].name, index: "\(gen[index].url[42..<gen[index].url.count-1])")){
                     VStack{
                         Text(gen[index].name.capitalized)
                             .minimumScaleFactor(0.1)
@@ -180,7 +174,7 @@ LazyVGrid(columns: [
     if let kind = typeDict["\(type)"] {
         ForEach(0..<kind.count, id: \.self) { index in
             HStack (content: {
-                
+                NavigationLink(destination: PokemonDetailView(name: kind[index].pokemon.name, index: "\(kind[index].pokemon.url[34..<kind[index].pokemon.url.count-1])")){
                 VStack{
                     Text(kind[index].pokemon.name.capitalized)
                         .minimumScaleFactor(0.1)
@@ -193,6 +187,7 @@ LazyVGrid(columns: [
                         .frame(width: 125, height: 125)
                     
                 }
+                }
                 .background(Color.pokeRed)
                 .foregroundColor(Color(red: 219/255, green: 215/255, blue: 207/255))
                 .cornerRadius(6)
@@ -201,6 +196,7 @@ LazyVGrid(columns: [
                     
                 )
             })
+            
         }
     }
     
@@ -209,43 +205,45 @@ LazyVGrid(columns: [
 }
 
 struct searchedPokemon: View {
-let pokemon: [PokemonInfo]
+let pokemon: [Pokemon]
 let searchText : String
 var body: some View {
 
-LazyVGrid(columns: [
-    GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16),
-    GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16),
-    GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16)
-], content:     {
-    
-    //searched pokemon list
-    
-    ForEach((pokemon).filter({ $0.name.capitalized.contains(searchText) }), id: \.self) { pokemon in
-    VStack {
+    LazyVGrid(columns: [
+        GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16),
+        GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16),
+        GridItem(.flexible(minimum: 50, maximum: 200), spacing: 16)
+    ], content:     {
         
-        Text("\(pokemon.name.capitalized)")
-            .minimumScaleFactor(0.1)
-            .lineLimit(1)
-            .font(.title)
-            .padding(.top, 5)
-        KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.url[34..<pokemon.url.count-1]).png"))
-            .resizable()
-            .frame(width: 125, height: 125)
+        //searched pokemon list
         
+        ForEach((pokemon).filter({ $0.name.capitalized.contains(searchText) }), id: \.self) { pokemon in
+            NavigationLink(destination: PokemonDetailView(name: pokemon.name, index: "\(pokemon.url[34..<pokemon.url.count-1])")){
+        VStack {
+            
+            Text("\(pokemon.name.capitalized)")
+                .minimumScaleFactor(0.1)
+                .lineLimit(1)
+                .font(.title)
+                .padding(.top, 5)
+            KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokemon.url[34..<pokemon.url.count-1]).png"))
+                .resizable()
+                .frame(width: 125, height: 125)
+            
+        }
+            }
+        .background(Color.pokeRed)
+        .foregroundColor(Color(red: 219/255, green: 215/255, blue: 207/255))
+        .cornerRadius(6)
+        .overlay(
+            RoundedRectangle(cornerRadius: 6).stroke(lineWidth: 1.35)
+            
+        )
     }
-    .background(Color.pokeRed)
-    .foregroundColor(Color(red: 219/255, green: 215/255, blue: 207/255))
-    .cornerRadius(6)
-    .overlay(
-        RoundedRectangle(cornerRadius: 6).stroke(lineWidth: 1.35)
         
-    )
-}
-    
-}).padding([.leading, .trailing], 14)
+    }).padding([.leading, .trailing], 14)
 
-}
+    }
 }
 
 

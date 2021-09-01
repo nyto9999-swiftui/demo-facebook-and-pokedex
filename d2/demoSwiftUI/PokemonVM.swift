@@ -15,14 +15,16 @@ import Kingfisher
 
 class PokemonVM: ObservableObject {
     
-    @Published var pokemons = [PokemonInfo]()
-    @Published var type = [Pokemons]()
-    @Published var pokemonDict = [String:[Pokemons]]()
-    @Published var genDict = [String:[PokemonByGen]]()
+    @Published var pokemons = [Pokemon]()
+    
+    @Published var typeDict = [String:[Pokemons]]()
+    @Published var genDict = [String:[Pokemon]]()
+    
     @Published var pokemonDetails = PokemonDetails()
     @Published var pokemonMoreDetails = PokemonMoreDetail()
     @Published var text = Flavor_text_entry()
-    
+    @Published var moreInfo = MoreInfo()
+//    @Published var type = [Pokemons]()
     init() {
         
         
@@ -30,8 +32,6 @@ class PokemonVM: ObservableObject {
         getPokemonByType()
         getAllPokemon()
         getPokemonByGen()
-        
-        
         //fetch pokemon detail page and name
 
     }
@@ -51,8 +51,8 @@ class PokemonVM: ObservableObject {
                 do {
                     let model = try JSONDecoder().decode(pokemonTypeArray.self, from: data)
                     DispatchQueue.main.async {
-                        self?.pokemonDict["\(type)"] = model.pokemon
-                        print("Type \(type) : \((self?.pokemonDict["\(type)"]?.count)!)")
+                        self?.typeDict["\(type)"] = model.pokemon
+                        print("Type \(type) : \((self?.typeDict["\(type)"]?.count)!)")
                     }
                     
                 }catch {
@@ -64,6 +64,7 @@ class PokemonVM: ObservableObject {
         
         
     }
+   
     
     private func getPokemonByGen(){
         
@@ -153,6 +154,8 @@ class PokemonVM: ObservableObject {
                 
                 let editedText = moreDetail.flavor_text_entries[0].flavor_text.replacingOccurrences(of: "\n", with: " ")
                 self.text.flavor_text = editedText
+                self.moreInfo.capture_rate = moreDetail.capture_rate
+                self.moreInfo.flavor_text = editedText
                 completion(self.text)
             }
 
@@ -163,15 +166,40 @@ class PokemonVM: ObservableObject {
     
     public func backgroundColor(forType type: String) -> UIColor {
         switch type {
-            case "fire": return .systemRed
-            case "poison": return .systemPurple
-            case "water": return .systemBlue
-            case "electirc": return .systemYellow
-            case "psychic": return .systemPink
-            case "normal": return .systemGray
+            case "fire": return UIColor(Color(hex: "#F08030"))
+            case "poison": return UIColor(Color(hex: "#A040A0"))
+            case "water": return UIColor(Color(hex: "#6890F0"))
+            case "electirc": return UIColor(Color(hex: "#F8D030"))
+            case "psychic": return UIColor(Color(hex: "#F85888"))
+            case "normal": return UIColor(Color(hex: "#A8A878"))
+            case "grass": return UIColor(Color(hex: "#78C850"))
+            case "bug": return UIColor(Color(hex: "#A8B820"))
+            case "ground": return UIColor(Color(hex: "#E0C068"))
+            case "fairy": return UIColor(Color(hex: "#EE99AC"))
+            case "fighting": return UIColor(Color(hex: "#C03028"))
+            case "rock": return UIColor(Color(hex: "#B8A038"))
+            case "ghost": return UIColor(Color(hex: "#705898"))
+            case "ice": return UIColor(Color(hex: "#98D8D8"))
+            case "dragon": return UIColor(Color(hex: "#7038F8"))
             
             default:
                 return .systemIndigo
+        }
+    }
+    
+   
+    
+    public func statShortString(forType type: String) -> String {
+        switch type {
+            case "hp": return "HP  "
+            case "attack": return "ATK"
+            case "special-attack": return "SA  "
+            case "special-defense": return "SD  "
+            case "defense": return "DEF"
+            case "speed": return "SP  "
+            
+            default:
+                return ""
         }
     }
     

@@ -10,151 +10,136 @@ import Kingfisher
 
 struct PokemonDetailView: View {
     @StateObject var pokeVM = PokemonVM()
-  
-    var name:String
     
+    var name:String
+    var index: String
     var body: some View {
-
-        VStack  (alignment: .center){
+        ZStack {
+            Color.pokeWhite.edgesIgnoringSafeArea(.all)
             
-            KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokeVM.pokemonDetails.id).png"))
-                .resizable()
-                .frame(width: 300, height: 300)
-                .background(Color.red)
-            
-            
-            // 名稱 fix
-            Text("名稱: \(name)")
-                .background(Color.gray)
-            
-            
-            // 資訊
-            //                 ForEach(pokeVM.pokemonDetails.forms, id: \.self) { form in
-            //                     Text(form.url)
-            //                 }
-            HStack (alignment: .center){
-                
-                ForEach(pokeVM.pokemonDetails.types, id: \.self) { poke in
-                    
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color(pokeVM.backgroundColor(forType: poke.type.name)).opacity(0.7))
-                        .overlay(
-                            Text(poke.type.name)
-                                .font(.subheadline).bold()
-                                .foregroundColor(.white)
-                            
-                            
-                        )
-                        .frame(width: 100, height: 40)
-                        .padding(.horizontal,3)
-                    
-                    
-                }
-                
-            }
-            
-            //身高體重
-            
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color.gray)
-                .overlay(
-                    Text("Weight \(String(pokeVM.pokemonDetails.weight))  Height \(String(pokeVM.pokemonDetails.height))")
+            HStack (alignment: .top) {
+                LazyVStack {
+               
+                    HStack {
+                        KFImage(URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(pokeVM.pokemonDetails.id).png"))
+                            .resizable()
+                            .frame(width: 200, height: 200)
+                    }
+                   
+             
+                  
+                    // name
+                    HStack {
+                        Text(name.capitalized)
+                            .font(.largeTitle).bold()
+                            .foregroundColor(Color.pokeRed)
                         
-                ).frame(width: 300, height: 40, alignment: .center)
-                
-            
-      
-            
-            
-            //個體
-//            ForEach(pokeVM.pokemonDetails.stats, id: \.self) { stat in
-//
-//
-//
-//                HStack {
-//                    Text(stats["\(stat.stat.name)"]!)
-//                    Text(String(stat.base_stat))
-//                    Spacer()
-//                }
-//
-//            }
-            HStack (alignment: .top, spacing: 6) {
-                VStack (alignment: .leading, spacing: 15){
-                    ForEach(0..<stats.count, id:\.self) { index in
-                        VStack (alignment: .leading, spacing: 6) {
-                            Text(stats[index])
-                        }
                     }
-                }
-                VStack (alignment: .leading, spacing: 15){
-                    ForEach(pokeVM.pokemonDetails.stats, id:\.self) { stat in
-                        VStack (alignment: .leading, spacing: 6) {
-                            Text(String(stat.base_stat))
+                 
+                    // types
+                    HStack (alignment: .center){
+                        
+                        ForEach(pokeVM.pokemonDetails.types, id: \.self) { poke in
+                            
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Color(pokeVM.backgroundColor(forType: poke.type.name)).opacity(0.7))
+                                .overlay(
+                                    Text(poke.type.name.capitalized)
+                                        .font(.subheadline).bold()
+                                        .foregroundColor(.white)
+
+                                )
+                                .frame(width: 100, height: 40)
+                                .padding(.horizontal,3)
                         }
+                        
                     }
+                    
+                    //weight height'
+                    
+                    HStack {
+                      
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.purple.opacity(0.7))
+                            .overlay(
+                                Text("Weight \(String(pokeVM.pokemonDetails.weight))  Height \(String(pokeVM.pokemonDetails.height))")
+                                    .foregroundColor(Color.black)
+                                     
+                            ).frame(width: 180, height: 27, alignment: .center)
+                  
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(Color.yellow.opacity(0.7))
+                            .overlay(
+                               
+                                Text("Catch Rate:")
+                                        .foregroundColor(Color.black)
+         
+                            ).frame(width: 135, height: 27, alignment: .center)
+                        }
+                    
                 
-                }
-                VStack (alignment: .leading, spacing: 15){
-                    ForEach(pokeVM.pokemonDetails.stats, id:\.self) { stat in
-                        VStack (alignment: .leading, spacing: 6) {
-                            ZStack (alignment: .leading){
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(Color.red)
-                                    .frame(width: 300)
+                    
+                    
+                    //txt
+                    HStack(alignment: .top) {
+                        Text(pokeVM.text.flavor_text)
+                            .foregroundColor(Color.black.opacity(0.8)).bold()
+                            
+                    
+                    }.frame(minHeight: 40, idealHeight: 100)
+                    
+                    //stats
+                    LazyVStack () {
+                        ForEach(pokeVM.pokemonDetails.stats, id:\.self) { stat in
+                            
+                             HStack () {
+                                GeometryReader  { g in
+                                    VStack (alignment: .leading) {
+                                       HStack () {
+                                           Text(pokeVM.statShortString(forType: stat.stat.name))
+                                            .font(.system(size: g.size.height > g.size.width ? g.size.width * 0.9: g.size.height * 0.9))
+                                            .foregroundColor(.black).bold()
+                                           Text(String(stat.base_stat))
+                                            .font(.system(size: g.size.height > g.size.width ? g.size.width * 0.75: g.size.height * 0.75))
+                                            .foregroundColor(.black).bold()
+                                           
+                                       }
+                                   }
+                                }
+                               
+
+                                ZStack (alignment: .leading){
                                     RoundedRectangle(cornerRadius: 20)
-                                        .fill(Color.green)
-                                        .frame(width: CGFloat(stat.base_stat)*2)
+                                        .fill(Color.white).opacity(0.5)
+                                        .frame(width: 300)
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .fill(Color.pokeRed)
+                                            .frame(width: CGFloat(stat.base_stat)*2)
+                                            
 
+                                }.frame(minHeight: 20, maxHeight: 20)
                             }
-                        }
-                        
-                    }
+                            }
+                    }.padding()
+                    Spacer()
+                 
                 }
-                Spacer()
-            }
-           
-            
-     
-            
-            
-            
-      
-            
-            //特性
-            ForEach(pokeVM.pokemonDetails.abilities, id: \.self) { abilities in
-                Text(abilities.ability.name)
-            }
-            
-            ForEach(pokeVM.pokemonMoreDetails.flavor_text_entries, id: \.self) { detail in
-                Text(detail.flavor_text)
-            }
-            
-            Text(pokeVM.text.flavor_text)
-            
-        }
-        .background(Color.blue)
-        .frame(
-            maxHeight: .infinity,
-            alignment: .topLeading)
-        .onAppear{
+                
+               
+       
+                Spacer()}.onAppear{
             pokeVM.getPokemonDetail(name: name) { detail in
                 self.pokeVM.pokemonDetails = detail
             }
-            pokeVM.getPokemonMoreDetail(index: 1) { moreDetail in
-                self.pokeVM.text = moreDetail
+                    pokeVM.getPokemonMoreDetail(index: Int(index) ?? 1) { moreDetail in
+                        self.pokeVM.text = moreDetail
             }
             
         }
- 
-        //        .background(Color(pokeVM.backgroundColor(forType: pokeVM.pokemonDetails.types[0].type.name)))
+       
         
     }
     
 }
-
-//struct PokemonDetailView_Previews: PreviewProvider {
-//
-//    static var previews: some View {
-//        PokemonDetailView(pokeName: "", dict: PokemonByGen)
-//    }
-//}
+ 
+}
